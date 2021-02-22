@@ -1,0 +1,58 @@
+{
+  "name": "pollen-solutions/field",
+  "description": "Pollen Field Component - Collection of form fields.",
+  "homepage": "https://www.presstify.com/pollen-solutions/field/",
+  "keywords": [
+    "pollen-solutions",
+    "component",
+    "partial"
+  ],
+  "time": "2021-02-22",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jordy Manner",
+      "email": "jordy@presstify.com",
+      "role": "Developper"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://composer.presstify.com/pollen-solutions/"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "composer/composer": "^2.0",
+    "composer/installers": "~1.0",
+    "pollen-solutions/http": "^1.0",
+    "pollen-solutions/routing": "^1.0",
+    "pollen-solutions/support": "^1.0",
+    "pollen-solutions/validation": "^1.0",
+    "pollen-solutions/view": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pollen\\Field\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Pollen\\Field\\Test\\": "tests"
+    }
+  },
+  "suggest": {
+    "pollen-solutions/container" : "Pollen Container Component - PSR-11 ready Dependencies Injection Container"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  }
+}
