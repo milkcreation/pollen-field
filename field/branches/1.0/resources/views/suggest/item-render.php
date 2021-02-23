@@ -2,7 +2,7 @@
 /**
  * SUGGEST > Rendu de l'élément dans le selecteur.
  * ---------------------------------------------------------------------------------------------------------------------
- * @var tiFy\Field\FieldView $this
+ * @var Pollen\Field\FieldViewTemplateInterface $this
  * @var mixed $value
  */
 echo $this->get('value');

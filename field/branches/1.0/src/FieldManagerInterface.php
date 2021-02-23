@@ -64,11 +64,11 @@ interface FieldManagerInterface
      *
      * @param string $alias
      * @param string|FieldDriverInterface|Closure $driverDefinition
-     * @param Closure|null $callback
+     * @param Closure|null $registerCallback
      *
      * @return static
      */
-    public function register(string $alias, $driverDefinition, ?Closure $callback = null): FieldManagerInterface;
+    public function register(string $alias, $driverDefinition, ?Closure $registerCallback = null): FieldManagerInterface;
 
     /**
      * Déclaration des instances de pilotes par défaut.
@@ -78,7 +78,7 @@ interface FieldManagerInterface
     public function registerDefaultDrivers(): FieldManagerInterface;
 
     /**
-     * Chemin absolu vers une ressources (fichier|répertoire).
+     * Chemin absolu vers une ressource (fichier|répertoire).
      *
      * @param string|null $path Chemin relatif vers la ressource.
      *

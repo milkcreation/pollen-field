@@ -1,6 +1,6 @@
 <?php
 /**
- * @var tiFy\Field\FieldView $this
+ * @var Pollen\Field\FieldViewTemplateInterface $this
  */
 ?>
 <div class="FieldSelect-wrapper">

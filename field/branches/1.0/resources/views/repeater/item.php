@@ -1,6 +1,6 @@
 <?php
 /**
- * @var tiFy\Field\FieldView $this
+ * @var Pollen\Field\FieldViewTemplateInterface $this
  */
 echo field('text', [
     'name'  => "{$this->getName()}[{$this->get('index')}]",
