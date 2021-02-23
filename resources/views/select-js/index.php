@@ -1,6 +1,6 @@
 <?php
 /**
- * @var tiFy\Field\FieldView $this
+ * @var Pollen\Field\FieldViewTemplateInterface $this
  * @var tiFy\Field\Driver\SelectJs\SelectJsChoices $choices
  * @var tiFy\Field\Driver\Select\SelectChoice $choice
  */

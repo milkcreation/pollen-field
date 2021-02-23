@@ -1,5 +1,5 @@
 <?php
 /**
- * @var tiFy\Field\FieldView $this
+ * @var Pollen\Field\FieldViewTemplateInterface $this
  */
 echo partial('tag', $this->get('button'));

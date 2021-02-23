@@ -9,31 +9,38 @@ use Exception;
 use InvalidArgumentException;
 use RuntimeException;
 use League\Route\Http\Exception\NotFoundException;
-//use Pollen\Field\Drivers\ButtonDriver;
+use Pollen\Field\Drivers\ButtonDriver;
+
 //use Pollen\Field\Drivers\CheckboxCollectionDriver;
-//use Pollen\Field\Drivers\CheckboxDriver;
+use Pollen\Field\Drivers\CheckboxDriver;
+
 //use Pollen\Field\Drivers\ColorpickerDriver;
 //use Pollen\Field\Drivers\DatepickerDriver;
 //use Pollen\Field\Drivers\DatetimeJsDriver;
 //use Pollen\Field\Drivers\FileDriver;
 //use Pollen\Field\Drivers\FileJsDriver;
-//use Pollen\Field\Drivers\HiddenDriver;
-//use Pollen\Field\Drivers\LabelDriver;
-//use Pollen\Field\Drivers\NumberDriver;
+use Pollen\Field\Drivers\HiddenDriver;
+use Pollen\Field\Drivers\LabelDriver;
+use Pollen\Field\Drivers\NumberDriver;
+
 //use Pollen\Field\Drivers\NumberJsDriver;
-//use Pollen\Field\Drivers\PasswordDriver;
+use Pollen\Field\Drivers\PasswordDriver;
+
 //use Pollen\Field\Drivers\PasswordJsDriver;
 //use Pollen\Field\Drivers\RadioCollectionDriver;
-//use Pollen\Field\Drivers\RadioDriver;
+use Pollen\Field\Drivers\RadioDriver;
+
 //use Pollen\Field\Drivers\RepeaterDriver;
-//use Pollen\Field\Drivers\RequiredDriver;
+use Pollen\Field\Drivers\RequiredDriver;
+
 //use Pollen\Field\Drivers\SelectDriver;
 //use Pollen\Field\Drivers\SelectImageDriver;
 //use Pollen\Field\Drivers\SelectJsDriver;
 //use Pollen\Field\Drivers\SubmitDriver;
 //use Pollen\Field\Drivers\SuggestDriver;
-//use Pollen\Field\Drivers\TextareaDriver;
-//use Pollen\Field\Drivers\TextDriver;
+use Pollen\Field\Drivers\TextareaDriver;
+use Pollen\Field\Drivers\TextDriver;
+
 //use Pollen\Field\Drivers\TextRemainingDriver;
 //use Pollen\Field\Drivers\TinymceDriver;
 //use Pollen\Field\Drivers\ToggleSwitchDriver;
@@ -57,31 +64,31 @@ class FieldManager implements FieldManagerInterface
      * @var array
      */
     private $defaultDrivers = [
-        //'button'              => ButtonDriver::class,
-        //'checkbox'            => CheckboxDriver::class,
+        'button'   => ButtonDriver::class,
+        'checkbox' => CheckboxDriver::class,
         //'checkbox-collection' => CheckboxCollectionDriver::class,
         //'colorpicker'         => ColorpickerDriver::class,
         //'datepicker'          => DatepickerDriver::class,
         //'datetime-js'         => DatetimeJsDriver::class,
         //'file'                => FileDriver::class,
         //'file-js'             => FileJsDriver::class,
-        //'hidden'              => HiddenDriver::class,
-        //'label'               => LabelDriver::class,
-        //'number'              => NumberDriver::class,
+        'hidden'   => HiddenDriver::class,
+        'label'    => LabelDriver::class,
+        'number'   => NumberDriver::class,
         //'number-js'           => NumberJsDriver::class,
-        //'password'            => PasswordDriver::class,
+        'password' => PasswordDriver::class,
         //'password-js'         => PasswordJsDriver::class,
-        //'radio'               => RadioDriver::class,
+        'radio'    => RadioDriver::class,
         //'radio-collection'    => RadioCollectionDriver::class,
         //'repeater'            => RepeaterDriver::class,
-        //'required'            => RequiredDriver::class,
+        'required' => RequiredDriver::class,
         //'select'              => SelectDriver::class,
         //'select-image'        => SelectImageDriver::class,
         //'select-js'           => SelectJsDriver::class,
         //'submit'              => SubmitDriver::class,
         //'suggest'             => SuggestDriver::class,
-        //'text'                => TextDriver::class,
-        //'textarea'            => TextareaDriver::class,
+        'text'     => TextDriver::class,
+        'textarea' => TextareaDriver::class,
         //'text-remaining'      => TextRemainingDriver::class,
         //'tinymce'             => TinymceDriver::class,
         //'toggle-switch'       => ToggleSwitchDriver::class,
@@ -160,7 +167,6 @@ class FieldManager implements FieldManagerInterface
             $this->registerDefaultDrivers();
 
             $this->setBooted();
-
             //events()->trigger('field.booted', [$this]);
         }
         return $this;
@@ -171,7 +177,7 @@ class FieldManager implements FieldManagerInterface
      */
     public function get(string $alias, $idOrParams = null, ?array $params = []): ?FieldDriverInterface
     {
-        if(is_array($idOrParams)) {
+        if (is_array($idOrParams)) {
             $params = (array)$idOrParams;
             $id = null;
         } else {
@@ -253,7 +259,7 @@ class FieldManager implements FieldManagerInterface
     /**
      * @inheritDoc
      */
-    public function register(string $alias, $driverDefinition, ?Closure $callback = null): FieldManagerInterface
+    public function register(string $alias, $driverDefinition, ?Closure $registerCallback = null): FieldManagerInterface
     {
         if (isset($this->driverDefinitions[$alias])) {
             throw new RuntimeException(sprintf('Another FieldDriver with alias [%s] already registered', $alias));
@@ -261,8 +267,8 @@ class FieldManager implements FieldManagerInterface
 
         $this->driverDefinitions[$alias] = $driverDefinition;
 
-        if ($callback !== null) {
-            $callback($this);
+        if ($registerCallback !== null) {
+            $registerCallback($this);
         }
         return $this;
     }
