@@ -12,7 +12,9 @@ use Pollen\Http\JsonResponseInterface;
 use Pollen\Http\Request;
 use Pollen\Http\RequestInterface;
 use Pollen\Support\Concerns\BootableTrait;
+use Pollen\Support\Concerns\HttpRequestAwareTrait;
 use Pollen\Support\Concerns\ParamsBagAwareTrait;
+use Pollen\Support\Concerns\PartialManagerAwareTrait;
 use Pollen\Support\HtmlAttrs;
 use Pollen\Support\Str;
 use Throwable;
@@ -23,7 +25,9 @@ use Throwable;
 abstract class FieldDriver implements FieldDriverInterface
 {
     use BootableTrait;
+    use HttpRequestAwareTrait;
     use ParamsBagAwareTrait;
+    use PartialManagerAwareTrait;
 
     /**
      * Indice de l'instance dans le gestionnaire.

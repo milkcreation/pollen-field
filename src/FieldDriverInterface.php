@@ -8,7 +8,9 @@ use Pollen\Http\JsonResponseInterface;
 use Pollen\Http\RequestInterface;
 
 /**
+ * @mixin \Pollen\Support\Concerns\HttpRequestAwareTrait;
  * @mixin \Pollen\Support\Concerns\ParamsBagAwareTrait
+ * @mixin \Pollen\Support\Concerns\PartialManagerAwareTrait;
  * @mixin \Pollen\Support\ParamsBag
  */
 interface FieldDriverInterface
