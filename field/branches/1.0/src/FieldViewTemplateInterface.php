@@ -19,4 +19,25 @@ use Pollen\View\ViewTemplateInterface;
  */
 interface FieldViewTemplateInterface extends ViewTemplateInterface
 {
+    /**
+     * Rendu d'un champ.
+     *
+     * @param string|null $alias Alias de qualification.
+     * @param mixed $idOrParams Identifiant de qualification|Liste des attributs de configuration.
+     * @param array $params Liste des attributs de configuration.
+     *
+     * @return string
+     */
+    public function field(string $alias, $idOrParams = null, array $params = []): string;
+
+    /**
+     * Rendu d'une portion d'affichage.
+     *
+     * @param string|null $alias Alias de qualification.
+     * @param mixed $idOrParams Identifiant de qualification|Liste des attributs de configuration.
+     * @param array $params Liste des attributs de configuration.
+     *
+     * @return string
+     */
+    public function partial(string $alias, $idOrParams = null, array $params = []): string;
 }

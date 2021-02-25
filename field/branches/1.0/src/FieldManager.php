@@ -318,7 +318,7 @@ class FieldManager implements FieldManagerInterface
             );
 
             if (!file_exists($this->resourcesBaseDir)) {
-                throw new RuntimeException('Partial ressources directory unreachable');
+                throw new RuntimeException('Field ressources directory unreachable');
             }
         }
 
