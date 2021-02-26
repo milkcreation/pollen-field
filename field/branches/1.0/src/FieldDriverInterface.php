@@ -6,34 +6,15 @@ namespace Pollen\Field;
 
 use Pollen\Http\JsonResponseInterface;
 use Pollen\Http\RequestInterface;
+use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
+use Pollen\Support\Proxy\HttpRequestProxyInterface;
+use Pollen\Support\Proxy\PartialManagerProxyInterface;
 
-/**
- * @mixin \Pollen\Support\Concerns\HttpRequestAwareTrait;
- * @mixin \Pollen\Support\Concerns\ParamsBagAwareTrait
- * @mixin \Pollen\Support\Concerns\PartialManagerAwareTrait;
- * @mixin \Pollen\Support\ParamsBag
- */
-interface FieldDriverInterface
+interface FieldDriverInterface extends
+    HttpRequestProxyInterface,
+    PartialManagerProxyInterface,
+    ParamsBagDelegateTraitInterface
 {
-    /**
-     * Récupération des paramètres.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function __get(string $key);
-
-    /**
-     * Délégation d'appel des méthodes du ParamBag.
-     *
-     * @param string $method
-     * @param array $arguments
-     *
-     * @return mixed
-     */
-    public function __call(string $method, array $arguments);
-
     /**
      * Résolution de sortie de la classe en tant que chaîne de caractère.
      *

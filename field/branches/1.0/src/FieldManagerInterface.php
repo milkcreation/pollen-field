@@ -6,15 +6,13 @@ namespace Pollen\Field;
 
 use Closure;
 use League\Route\Http\Exception\NotFoundException;
+use Pollen\Support\Concerns\BootableTraitInterface;
+use Pollen\Support\Concerns\ConfigBagAwareTraitInterface;
 use Pollen\Http\ResponseInterface;
 use Pollen\Routing\RouterInterface;
+use Pollen\Support\Proxy\ContainerProxyInterface;
 
-/**
- * @mixin \Pollen\Support\Concerns\BootableTrait
- * @mixin \Pollen\Support\Concerns\ConfigBagAwareTrait
- * @mixin \Pollen\Support\Concerns\ContainerAwareTrait
- */
-interface FieldManagerInterface
+interface FieldManagerInterface extends BootableTraitInterface, ConfigBagAwareTraitInterface, ContainerProxyInterface
 {
     /**
      * Récupération de la liste des pilote déclarés.
@@ -68,7 +66,11 @@ interface FieldManagerInterface
      *
      * @return static
      */
-    public function register(string $alias, $driverDefinition, ?Closure $registerCallback = null): FieldManagerInterface;
+    public function register(
+        string $alias,
+        $driverDefinition,
+        ?Closure $registerCallback = null
+    ): FieldManagerInterface;
 
     /**
      * Déclaration des instances de pilotes par défaut.
@@ -89,9 +91,9 @@ interface FieldManagerInterface
     /**
      * Définition du chemin absolu vers le répertoire des ressources.
      *
+     * @return static
      * @var string $resourceBaseDir
      *
-     * @return static
      */
     public function setResourcesBaseDir(string $resourceBaseDir): FieldManagerInterface;
 

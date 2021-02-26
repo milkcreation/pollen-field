@@ -5,29 +5,24 @@ declare(strict_types=1);
 namespace Pollen\Field;
 
 use Closure;
-use BadMethodCallException;
 use InvalidArgumentException;
 use Pollen\Http\JsonResponse;
 use Pollen\Http\JsonResponseInterface;
 use Pollen\Http\Request;
 use Pollen\Http\RequestInterface;
 use Pollen\Support\Concerns\BootableTrait;
-use Pollen\Support\Concerns\HttpRequestAwareTrait;
-use Pollen\Support\Concerns\ParamsBagAwareTrait;
-use Pollen\Support\Concerns\PartialManagerAwareTrait;
+use Pollen\Support\Concerns\ParamsBagDelegateTrait;
+use Pollen\Support\Proxy\HttpRequestProxy;
+use Pollen\Support\Proxy\PartialManagerProxy;
 use Pollen\Support\HtmlAttrs;
 use Pollen\Support\Str;
-use Throwable;
 
-/**
- * @mixin \Pollen\Support\ParamsBag
- */
 abstract class FieldDriver implements FieldDriverInterface
 {
     use BootableTrait;
-    use HttpRequestAwareTrait;
-    use ParamsBagAwareTrait;
-    use PartialManagerAwareTrait;
+    use HttpRequestProxy;
+    use PartialManagerProxy;
+    use ParamsBagDelegateTrait;
 
     /**
      * Indice de l'instance dans le gestionnaire.
@@ -78,33 +73,6 @@ abstract class FieldDriver implements FieldDriverInterface
     public function __construct(FieldManagerInterface $fieldManager)
     {
         $this->fieldManager = $fieldManager;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __get(string $key)
-    {
-        return $this->params($key);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function __call(string $method, array $arguments)
-    {
-        try {
-            return $this->params()->{$method}(...$arguments);
-        } catch (Throwable $e) {
-            throw new BadMethodCallException(
-                sprintf(
-                    'FieldDriver [%s] method call [%s] throws an exception: %s',
-                    $this->getAlias(),
-                    $method,
-                    $e->getMessage()
-                )
-            );
-        }
     }
 
     /**
@@ -278,9 +246,9 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function parseParams(): FieldDriverInterface
+    public function parseParams(): void
     {
-        return $this->parseAttrId()->parseAttrClass()->parseAttrName()->parseAttrValue();
+        $this->parseAttrId()->parseAttrClass()->parseAttrName()->parseAttrValue();
     }
 
     /**

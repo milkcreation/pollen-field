@@ -6,11 +6,9 @@ namespace Pollen\Field\Drivers\RadioCollection;
 
 use Pollen\Field\Drivers\LabelDriverInterface;
 use Pollen\Field\Drivers\RadioDriverInterface;
+use Pollen\Support\ParamsBagInterface;
 
-/**
- * @mixin \Pollen\Support\ParamsBag
- */
-interface RadioChoiceInterface
+interface RadioChoiceInterface extends ParamsBagInterface
 {
     /**
      * Résolution de sortie de la classe sous la forme d'une chaîne de caractères.

@@ -177,7 +177,7 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
     /**
      * @inheritDoc
      */
-    public function parse(): RadioChoiceInterface
+    public function parse(): void
     {
         parent::parse();
 
@@ -207,8 +207,6 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
 
         $this->radio = Field::get('radio', $this->get('radio', []));
         $this->label = Field::get('label', $this->get('label', []));
-
-        return $this;
     }
 
     /**

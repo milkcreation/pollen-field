@@ -12,9 +12,9 @@ class TextareaDriver extends FieldDriver implements TextareaDriverInterface
     /**
      * @inheritDoc
      */
-    public function parseParams(): FieldDriverInterface
+    public function parseParams(): void
     {
-        return $this->parseAttrId()->parseAttrClass()->parseAttrName();
+        $this->parseAttrId()->parseAttrClass()->parseAttrName();
     }
 
     /**
