@@ -96,7 +96,7 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function isDisabled(): bool
     {
-        return in_array('disabled', $this->get('attrs', []));
+        return in_array('disabled', $this->get('attrs', []), true);
     }
 
     /**
@@ -141,7 +141,7 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
     /**
      * @inheritdoc
      */
-    public function parse(): SelectChoiceInterface
+    public function parse(): void
     {
         parent::parse();
 
@@ -154,8 +154,6 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
         } else {
             $this->set('attrs.value', $this->getValue());
         }
-
-        return $this;
     }
 
     /**

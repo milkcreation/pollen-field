@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\Select;
 
-/**
- * @mixin \Pollen\Support\ParamsBag
- */
-interface SelectChoiceInterface
+use Pollen\Support\ParamsBagInterface;
+
+interface SelectChoiceInterface extends ParamsBagInterface
 {
     /**
      * Récupération du contenu de la balise.

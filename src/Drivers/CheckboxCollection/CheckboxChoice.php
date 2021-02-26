@@ -175,7 +175,7 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
     /**
      * @inheritDoc
      */
-    public function parse(): CheckboxChoiceInterface
+    public function parse(): void
     {
         parent::parse();
 
@@ -205,8 +205,6 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
 
         $this->checkbox = Field::get('checkbox', $this->get('checkbox', []));
         $this->label = Field::get('label', $this->get('label', []));
-
-        return $this;
     }
 
     /**

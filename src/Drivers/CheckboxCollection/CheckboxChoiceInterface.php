@@ -6,11 +6,9 @@ namespace Pollen\Field\Drivers\CheckboxCollection;
 
 use Pollen\Field\Drivers\CheckboxDriverInterface;
 use Pollen\Field\Drivers\LabelDriverInterface;
+use Pollen\Support\ParamsBagInterface;
 
-/**
- * @mixin \Pollen\Support\ParamsBag
- */
-interface CheckboxChoiceInterface
+interface CheckboxChoiceInterface extends ParamsBagInterface
 {
     /**
      * Résolution de sortie de la classe sous la forme d'une chaîne de caractères.
