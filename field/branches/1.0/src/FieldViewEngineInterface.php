@@ -12,7 +12,7 @@ interface FieldViewEngineInterface extends ViewEngineInterface
     /**
      * {@inheritDoc}
      *
-     * @return FieldViewTemplate
+     * @return FieldViewTemplateInterface
      */
     public function make($name): ViewTemplateInterface;
 }

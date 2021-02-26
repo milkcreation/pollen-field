@@ -6,13 +6,18 @@ namespace Pollen\Field;
 
 use Closure;
 use League\Route\Http\Exception\NotFoundException;
-use Pollen\Support\Concerns\BootableTraitInterface;
-use Pollen\Support\Concerns\ConfigBagAwareTraitInterface;
 use Pollen\Http\ResponseInterface;
 use Pollen\Routing\RouterInterface;
+use Pollen\Support\Concerns\BootableTraitInterface;
+use Pollen\Support\Concerns\ConfigBagAwareTraitInterface;
 use Pollen\Support\Proxy\ContainerProxyInterface;
+use Pollen\Support\Proxy\RouterProxyInterface;
 
-interface FieldManagerInterface extends BootableTraitInterface, ConfigBagAwareTraitInterface, ContainerProxyInterface
+interface FieldManagerInterface extends
+    BootableTraitInterface,
+    ConfigBagAwareTraitInterface,
+    ContainerProxyInterface,
+    RouterProxyInterface
 {
     /**
      * Récupération de la liste des pilote déclarés.
@@ -38,13 +43,6 @@ interface FieldManagerInterface extends BootableTraitInterface, ConfigBagAwareTr
      * @return FieldDriverInterface|null
      */
     public function get(string $alias, $idOrParams = null, ?array $params = []): ?FieldDriverInterface;
-
-    /**
-     * Récupération de l'instance du gestionnaire de routage.
-     *
-     * @return RouterInterface|null
-     */
-    public function getRouter(): ?RouterInterface;
 
     /**
      * Récupération de l'url de traitement des requêtes XHR.
@@ -96,15 +94,6 @@ interface FieldManagerInterface extends BootableTraitInterface, ConfigBagAwareTr
      *
      */
     public function setResourcesBaseDir(string $resourceBaseDir): FieldManagerInterface;
-
-    /**
-     * Définition de l'instance du gestionnaire de routage.
-     *
-     * @param RouterInterface $router
-     *
-     * @return static
-     */
-    public function setRouter(RouterInterface $router): FieldManagerInterface;
 
     /**
      * Répartiteur de traitement d'une requête XHR.

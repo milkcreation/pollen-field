@@ -26,7 +26,7 @@ class FieldViewEngine extends ViewEngine implements FieldViewEngineInterface
     /**
      * {@inheritDoc}
      *
-     * @return FieldViewTemplate
+     * @return FieldViewTemplateInterface
      */
     public function make($name): ViewTemplateInterface
     {

@@ -7,6 +7,7 @@ namespace Pollen\Field;
 use Closure;
 use Exception;
 use InvalidArgumentException;
+use Pollen\Support\Proxy\RouterProxy;
 use RuntimeException;
 use League\Route\Http\Exception\NotFoundException;
 use Pollen\Field\Drivers\ButtonDriver;
@@ -46,7 +47,6 @@ use Pollen\Field\Drivers\TextDriver;
 //use Pollen\Field\Drivers\ToggleSwitchDriver;
 use Pollen\Http\ResponseInterface;
 use Pollen\Routing\RouteInterface;
-use Pollen\Routing\RouterInterface;
 use Pollen\Support\Filesystem;
 use Pollen\Support\Concerns\BootableTrait;
 use Pollen\Support\Concerns\ConfigBagAwareTrait;
@@ -58,6 +58,7 @@ class FieldManager implements FieldManagerInterface
     use BootableTrait;
     use ConfigBagAwareTrait;
     use ContainerProxy;
+    use RouterProxy;
 
     /**
      * Instance principale.
@@ -119,12 +120,6 @@ class FieldManager implements FieldManagerInterface
     protected $resourcesBaseDir;
 
     /**
-     * Instance du gestionnaire de routage.
-     * @var RouterInterface|null
-     */
-    protected $router;
-
-    /**
      * Route de traitement des requêtes XHR.
      * @var RouteInterface|null
      */
@@ -180,7 +175,7 @@ class FieldManager implements FieldManagerInterface
         if (!$this->isBooted()) {
             //events()->trigger('field.booting', [$this]);
 
-            if ($router = $this->getRouter()) {
+            if ($router = $this->router()) {
                 $this->xhrRoute = $router->xhr(
                     '/api/' . md5('field') . '/{field}/{controller}',
                     [$this, 'xhrResponseDispatcher']
@@ -258,20 +253,9 @@ class FieldManager implements FieldManagerInterface
     /**
      * @inheritDoc
      */
-    public function getRouter(): ?RouterInterface
-    {
-        if (($this->router === null) && $this->containerHas(RouterInterface::class)) {
-            $this->router = $this->containerGet(RouterInterface::class);
-        }
-        return $this->router;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getXhrRouteUrl(string $field, ?string $controller = null, array $params = []): ?string
     {
-        if ($this->xhrRoute instanceof RouteInterface && ($router = $this->getRouter())) {
+        if ($this->xhrRoute instanceof RouteInterface && ($router = $this->router())) {
             $controller = $controller ?? 'xhrResponse';
 
             return $router->getRouteUrl($this->xhrRoute, array_merge($params, compact('field', 'controller')));
@@ -331,16 +315,6 @@ class FieldManager implements FieldManagerInterface
     public function setResourcesBaseDir(string $resourceBaseDir): FieldManagerInterface
     {
         $this->resourcesBaseDir = Filesystem::normalizePath($resourceBaseDir);
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRouter(RouterInterface $router): FieldManagerInterface
-    {
-        $this->router = $router;
 
         return $this;
     }
