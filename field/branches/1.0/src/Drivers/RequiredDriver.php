@@ -13,6 +13,6 @@ class RequiredDriver extends FieldDriver implements RequiredDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/required');
+        return $this->field()->resources('/views/required');
     }
 }

@@ -145,7 +145,7 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/repeater');
+        return $this->field()->resources('/views/repeater');
     }
 
     /**
@@ -153,7 +153,7 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
      */
     public function xhrResponse(...$args): JsonResponseInterface
     {
-        $request = $this->getRequest();
+        $request = $this->httpRequest();
 
         $max = $request->request->get('max', -1);
         $index = $request->request->get('index', 0);
@@ -163,7 +163,8 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
                 'name'   => $request->request->get('name', ''),
                 'viewer' => $request->request->get('viewer', []),
             ]
-        )->parse();
+        );
+        $this->parse();
 
         if (($max > 0) && ($index >= $max)) {
             $content = [

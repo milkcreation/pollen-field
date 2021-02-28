@@ -87,6 +87,6 @@ class TextRemainingDriver extends FieldDriver implements TextRemainingDriverInte
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/text-remaining');
+        return $this->field()->resources('/views/text-remaining');
     }
 }

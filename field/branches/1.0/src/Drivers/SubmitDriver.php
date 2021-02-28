@@ -39,6 +39,6 @@ class SubmitDriver extends FieldDriver implements SubmitDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/submit');
+        return $this->field()->resources('/views/submit');
     }
 }

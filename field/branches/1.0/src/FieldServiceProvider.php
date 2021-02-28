@@ -86,7 +86,6 @@ class FieldServiceProvider extends BaseServiceProvider
         );
 
         $this->registerDrivers();
-        $this->registerViewEngine();
     }
 
     /**
@@ -262,21 +261,6 @@ class FieldServiceProvider extends BaseServiceProvider
             ToggleSwitchDriver::class,
             function () {
                 return new ToggleSwitchDriver($this->getContainer()->get(FieldManagerInterface::class));
-            }
-        );
-    }
-
-    /**
-     * Déclaration du moteur d'affichage.
-     *
-     * @return void
-     */
-    public function registerViewEngine(): void
-    {
-        $this->getContainer()->add(
-            FieldViewEngineInterface::class,
-            function () {
-                return new FieldViewEngine();
             }
         );
     }

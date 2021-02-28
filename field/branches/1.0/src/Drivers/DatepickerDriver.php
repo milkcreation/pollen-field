@@ -44,6 +44,6 @@ class DatepickerDriver extends FieldDriver implements DatepickerDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/datepicker');
+        return $this->field()->resources('/views/datepicker');
     }
 }

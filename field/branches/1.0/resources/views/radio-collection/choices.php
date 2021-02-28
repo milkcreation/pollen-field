@@ -1,7 +1,7 @@
 <?php
 /**
- * @var Pollen\Field\FieldViewTemplateInterface $this
- * @var tiFy\Contracts\Field\RadioChoice $item
+ * @var Pollen\Field\FieldViewLoaderInterface $this
+ * @var Pollen\Field\Drivers\RadioCollection\RadioChoiceInterface $item
  */
 ?>
 <ul class="FieldRadioCollection-choices">

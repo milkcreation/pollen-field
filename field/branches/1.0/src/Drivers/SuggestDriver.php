@@ -134,7 +134,7 @@ class SuggestDriver extends FieldDriver implements SuggestDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/suggest');
+        return $this->field()->resources('/views/suggest');
     }
 
     /**
@@ -145,7 +145,7 @@ class SuggestDriver extends FieldDriver implements SuggestDriverInterface
         $items = (new Collection($this->sample))
             ->filter(
                 function ($label) {
-                    return preg_match('/' . $this->getRequest()->request->get('_term', '') . '/i', $label);
+                    return preg_match('/' . $this->httpRequest()->request->get('_term', '') . '/i', $label);
                 }
             )->map(
                 function ($label, $value) {

@@ -40,6 +40,6 @@ class NumberDriver extends FieldDriver implements NumberDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/number');
+        return $this->field()->resources('/views/number');
     }
 }

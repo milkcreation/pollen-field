@@ -58,6 +58,6 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/checkbox-collection');
+        return $this->field()->resources('/views/checkbox-collection');
     }
 }

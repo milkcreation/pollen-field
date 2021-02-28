@@ -75,6 +75,6 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/radio');
+        return $this->field()->resources('/views/radio');
     }
 }

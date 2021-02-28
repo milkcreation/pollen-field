@@ -44,6 +44,6 @@ class ButtonDriver extends FieldDriver implements ButtonDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/button');
+        return $this->field()->resources('/views/button');
     }
 }

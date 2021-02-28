@@ -220,7 +220,7 @@ class SelectJsDriver extends FieldDriver implements SelectJsDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/select-js');
+        return $this->field()->resources('/views/select-js');
     }
 
     /**

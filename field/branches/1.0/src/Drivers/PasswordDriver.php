@@ -24,6 +24,6 @@ class PasswordDriver extends FieldDriver implements PasswordDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/password');
+        return $this->field()->resources('/views/password');
     }
 }

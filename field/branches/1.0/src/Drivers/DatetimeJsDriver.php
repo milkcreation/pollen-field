@@ -263,6 +263,6 @@ class DatetimeJsDriver extends FieldDriver implements DatetimeJsDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/datetime-js');
+        return $this->field()->resources('/views/datetime-js');
     }
 }

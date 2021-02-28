@@ -73,6 +73,6 @@ class NumberJsDriver extends FieldDriver implements NumberJsDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/number-js');
+        return $this->field()->resources('/views/number-js');
     }
 }
