@@ -1,6 +1,6 @@
 <?php
 /**
- * @var Pollen\Field\FieldViewTemplateInterface $this
+ * @var Pollen\Field\FieldViewLoaderInterface $this
  */
 echo field('text', [
     'name'  => "{$this->getName()}[{$this->get('index')}]",

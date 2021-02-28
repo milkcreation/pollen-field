@@ -28,7 +28,7 @@ class SelectImageChoices extends SelectJsChoices implements SelectImageChoicesIn
 
             $items = [];
             if ($field->get('none')) {
-                $items[''] = Img::getBase64Src($field->fieldManager()->resources('/views/select-image/none.jpg'));
+                $items[''] = Img::getBase64Src($field->field()->resources('/views/select-image/none.jpg'));
             }
 
             foreach ($finder as $file) {

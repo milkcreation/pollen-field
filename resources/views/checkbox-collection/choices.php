@@ -1,7 +1,7 @@
 <?php
 /**
- * @var Pollen\Field\FieldViewTemplateInterface $this
- * @var tiFy\Contracts\Field\CheckboxChoice $item
+ * @var Pollen\Field\FieldViewLoaderInterface $this
+ * @var Pollen\Field\Drivers\CheckboxCollection\CheckboxChoiceInterface $item
  */
 ?>
 <ul class="FieldCheckboxCollection-choices">

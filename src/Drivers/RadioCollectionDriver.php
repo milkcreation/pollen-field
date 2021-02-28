@@ -50,6 +50,6 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/radio-collection');
+        return $this->field()->resources('/views/radio-collection');
     }
 }

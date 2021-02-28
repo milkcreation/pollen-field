@@ -1,8 +1,8 @@
 <?php
 /**
- * @var Pollen\Field\FieldViewTemplateInterface $this
- * @var tiFy\Field\Driver\SelectJs\SelectJsChoices $choices
- * @var tiFy\Field\Driver\Select\SelectChoice $choice
+ * @var Pollen\Field\FieldViewLoaderInterface $this
+ * @var Pollen\Field\Drivers\SelectJs\SelectJsChoicesInterface $choices
+ * @var Pollen\Field\Drivers\Select\SelectChoiceInterface $choice
  */
 ?>
 <?php $this->before(); ?>

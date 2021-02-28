@@ -32,6 +32,6 @@ class TextareaDriver extends FieldDriver implements TextareaDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/textarea');
+        return $this->field()->resources('/views/textarea');
     }
 }

@@ -53,6 +53,6 @@ class SelectImageDriver extends FieldDriver implements SelectImageDriverInterfac
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/select-image');
+        return $this->field()->resources('/views/select-image');
     }
 }

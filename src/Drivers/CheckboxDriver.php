@@ -75,6 +75,6 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/checkbox');
+        return $this->field()->resources('/views/checkbox');
     }
 }

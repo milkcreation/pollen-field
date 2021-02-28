@@ -63,6 +63,6 @@ class ToggleSwitchDriver extends FieldDriver implements ToggleSwitchDriverInterf
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/toggle-switch');
+        return $this->field()->resources('/views/toggle-switch');
     }
 }

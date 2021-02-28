@@ -57,6 +57,6 @@ class FileDriver extends FieldDriver implements FileDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/file');
+        return $this->field()->resources('/views/file');
     }
 }

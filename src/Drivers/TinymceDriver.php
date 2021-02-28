@@ -57,6 +57,6 @@ class TinymceDriver extends FieldDriver implements TinymceDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/tinymce');
+        return $this->field()->resources('/views/tinymce');
     }
 }

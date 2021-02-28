@@ -24,6 +24,6 @@ class TextDriver extends FieldDriver implements TextDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/text');
+        return $this->field()->resources('/views/text');
     }
 }

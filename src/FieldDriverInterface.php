@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Pollen\Field;
 
 use Pollen\Http\JsonResponseInterface;
-use Pollen\Http\RequestInterface;
 use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
 use Pollen\Support\Proxy\HttpRequestProxyInterface;
-use Pollen\Support\Proxy\PartialManagerProxyInterface;
+use Pollen\Support\Proxy\FieldProxyInterface;
+use Pollen\Support\Proxy\PartialProxyInterface;
+use Pollen\View\ViewEngineInterface;
 
 interface FieldDriverInterface extends
     HttpRequestProxyInterface,
-    PartialManagerProxyInterface,
+    FieldProxyInterface,
+    PartialProxyInterface,
     ParamsBagDelegateTraitInterface
 {
     /**
@@ -58,13 +60,6 @@ interface FieldDriverInterface extends
     public function content(): void;
 
     /**
-     * Récupération du gestionnaire de champs.
-     *
-     * @return FieldManagerInterface
-     */
-    public function fieldManager(): FieldManagerInterface;
-
-    /**
      * Récupération de l'identifiant de qualification dans le gestionnaire.
      *
      * @return string
@@ -98,13 +93,6 @@ interface FieldDriverInterface extends
      * @return string
      */
     public function getName(): string;
-
-    /**
-     * Récupération de l'instance de la requête HTTP associée.
-     *
-     * @return RequestInterface
-     */
-    public function getRequest(): RequestInterface;
 
     /**
      * Récupération de la valeur dans la requête HTTP de soumission.
@@ -194,22 +182,13 @@ interface FieldDriverInterface extends
     public function setIndex(int $index): FieldDriverInterface;
 
     /**
-     * Définition de l'instance de la requête HTTP associée.
-     *
-     * @param RequestInterface $request
-     *
-     * @return static
-     */
-    public function setRequest(RequestInterface $request): FieldDriverInterface;
-
-    /**
      * Définition de l'instance du moteur d'affichage.
      *
-     * @param FieldViewEngineInterface $viewEngine
+     * @param ViewEngineInterface $viewEngine
      *
      * @return static
      */
-    public function setViewEngine(FieldViewEngineInterface $viewEngine): FieldDriverInterface;
+    public function setViewEngine(ViewEngineInterface $viewEngine): FieldDriverInterface;
 
     /**
      * Instance du gestionnaire de gabarits d'affichage ou rendu du gabarit d'affichage.
@@ -217,7 +196,7 @@ interface FieldDriverInterface extends
      * @param string|null view Nom de qualification du gabarit.
      * @param array $data Liste des variables passées en argument.
      *
-     * @return FieldViewEngineInterface|string
+     * @return ViewEngineInterface|string
      */
     public function view(?string $view = null, array $data = []);
 

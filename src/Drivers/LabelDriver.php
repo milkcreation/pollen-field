@@ -30,6 +30,6 @@ class LabelDriver extends FieldDriver implements LabelDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/label');
+        return $this->field()->resources('/views/label');
     }
 }

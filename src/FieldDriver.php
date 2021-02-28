@@ -8,20 +8,22 @@ use Closure;
 use InvalidArgumentException;
 use Pollen\Http\JsonResponse;
 use Pollen\Http\JsonResponseInterface;
-use Pollen\Http\Request;
-use Pollen\Http\RequestInterface;
 use Pollen\Support\Concerns\BootableTrait;
 use Pollen\Support\Concerns\ParamsBagDelegateTrait;
+use Pollen\Support\Proxy\FieldProxy;
 use Pollen\Support\Proxy\HttpRequestProxy;
-use Pollen\Support\Proxy\PartialManagerProxy;
+use Pollen\Support\Proxy\PartialProxy;
 use Pollen\Support\HtmlAttrs;
 use Pollen\Support\Str;
+use Pollen\View\ViewEngine;
+use Pollen\View\ViewEngineInterface;
 
 abstract class FieldDriver implements FieldDriverInterface
 {
     use BootableTrait;
+    use FieldProxy;
     use HttpRequestProxy;
-    use PartialManagerProxy;
+    use PartialProxy;
     use ParamsBagDelegateTrait;
 
     /**
@@ -29,12 +31,6 @@ abstract class FieldDriver implements FieldDriverInterface
      * @var int
      */
     private $index = 0;
-
-    /**
-     * Instance du gestionnaire.
-     * @var FieldManagerInterface
-     */
-    private $fieldManager;
 
     /**
      * Alias de qualification.
@@ -56,14 +52,8 @@ abstract class FieldDriver implements FieldDriverInterface
     protected $id = '';
 
     /**
-     * Instance de la requête HTTP associée.
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
      * Instance du moteur de gabarits d'affichage.
-     * @var FieldViewEngineInterface
+     * @var ViewEngineInterface
      */
     protected $viewEngine;
 
@@ -72,7 +62,7 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function __construct(FieldManagerInterface $fieldManager)
     {
-        $this->fieldManager = $fieldManager;
+        $this->setFieldManager($fieldManager);
     }
 
     /**
@@ -168,14 +158,6 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function fieldManager(): FieldManagerInterface
-    {
-        return $this->fieldManager;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getAlias(): string
     {
         return $this->alias;
@@ -224,23 +206,9 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function getRequest(): RequestInterface
-    {
-        if (is_null($this->request)) {
-            $this->request = $this->fieldManager()->containerHas(RequestInterface::class)
-                ? $this->fieldManager()->containerGet(RequestInterface::class)
-                : Request::createFromGlobals();
-        }
-
-        return $this->request;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getXhrUrl(array $params = []): string
     {
-        return $this->fieldManager()->getXhrRouteUrl($this->getAlias(), null, $params);
+        return $this->field()->getXhrRouteUrl($this->getAlias(), null, $params);
     }
 
     /**
@@ -353,17 +321,7 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function setRequest(RequestInterface $request): FieldDriverInterface
-    {
-        $this->request = $request;
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setViewEngine(FieldViewEngineInterface $viewEngine): FieldDriverInterface
+    public function setViewEngine(ViewEngineInterface $viewEngine): FieldDriverInterface
     {
         $this->viewEngine = $viewEngine;
 
@@ -378,7 +336,7 @@ abstract class FieldDriver implements FieldDriverInterface
         if (is_null($this->viewEngine)) {
             $directory = null;
             $overrideDir = null;
-            $default = $this->fieldManager()->config('default.driver.viewer', []);
+            $default = $this->field()->config('default.driver.viewer', []);
 
             $directory = $this->get('viewer.directory');
             if ($directory && !file_exists($directory)) {
@@ -413,14 +371,31 @@ abstract class FieldDriver implements FieldDriverInterface
                 }
             }
 
-            $this->viewEngine = $this->fieldManager()->containerHas(FieldViewEngineInterface::class)
-                ? $this->fieldManager()->containerGet(FieldViewEngineInterface::class)
-                : new FieldViewEngine();
+            $this->viewEngine = new ViewEngine();
+            if ($container = $this->field()->getContainer()) {
+                $this->viewEngine->setContainer($container);
+            }
 
-            $this->viewEngine->setDirectory($directory)->setDelegate($this);
+            $this->viewEngine->setDirectory($directory)->setDelegate($this)->setLoader(FieldViewLoader::class);
 
             if ($overrideDir !== null) {
                 $this->viewEngine->addFolder('_override_dir', $overrideDir, true);
+            }
+
+            $mixins = [
+                'after',
+                'attrs',
+                'before',
+                'content',
+                'getAlias',
+                'getId',
+                'getIndex',
+                'getName',
+                'getValue'
+            ];
+
+            foreach($mixins as $mixin){
+                $this->viewEngine->setDelegateMixin($mixin);
             }
         }
 

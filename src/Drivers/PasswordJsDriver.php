@@ -9,8 +9,6 @@ use Pollen\Encryption\EncrypterInterface;
 use Pollen\Field\FieldDriver;
 use Pollen\Http\JsonResponse;
 use Pollen\Http\JsonResponseInterface;
-use Pollen\Http\Request;
-use Pollen\Http\RequestInterface;
 
 class PasswordJsDriver extends FieldDriver implements PasswordJsDriverInterface
 {
@@ -59,8 +57,8 @@ class PasswordJsDriver extends FieldDriver implements PasswordJsDriverInterface
      */
     public function getEncrypter(): ?EncrypterInterface
     {
-        if (is_null($this->encrypter) && $this->fieldManager()->containerHas(EncrypterInterface::class)) {
-            $this->encrypter = $this->fieldManager()->containerGet(EncrypterInterface::class);
+        if (is_null($this->encrypter) && $this->field()->containerHas(EncrypterInterface::class)) {
+            $this->encrypter = $this->field()->containerGet(EncrypterInterface::class);
         }
 
         return $this->encrypter;
@@ -128,7 +126,7 @@ class PasswordJsDriver extends FieldDriver implements PasswordJsDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/password-js');
+        return $this->field()->resources('/views/password-js');
     }
 
     /**
@@ -138,7 +136,7 @@ class PasswordJsDriver extends FieldDriver implements PasswordJsDriverInterface
     {
         return new JsonResponse([
             'success' => true,
-            'data'    => $this->getEncrypter()->decrypt($this->getRequest()->request->get('cypher')),
+            'data'    => $this->getEncrypter()->decrypt($this->httpRequest()->request->get('cypher')),
         ]);
     }
 }

@@ -51,6 +51,6 @@ class ColorpickerDriver extends FieldDriver implements ColorpickerDriverInterfac
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/colorpicker');
+        return $this->field()->resources('/views/colorpicker');
     }
 }

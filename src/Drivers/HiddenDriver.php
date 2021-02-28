@@ -24,6 +24,6 @@ class HiddenDriver extends FieldDriver implements HiddenDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/hidden');
+        return $this->field()->resources('/views/hidden');
     }
 }

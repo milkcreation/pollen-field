@@ -119,6 +119,6 @@ class FileJsDriver extends FieldDriver implements FileJsDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->fieldManager()->resources('/views/file-js');
+        return $this->field()->resources('/views/file-js');
     }
 }
