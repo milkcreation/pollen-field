@@ -27,7 +27,7 @@ class SelectJsChoices extends SelectChoices implements SelectJsChoicesInterface
     public function __construct($items, $selected = null)
     {
         if ($items instanceof ParamsBag) {
-            $args = is_null($selected)
+            $args = $selected === null
                 ? $items->all()
                 : array_merge(
                     ['in' => $selected, 'per_page' => -1],

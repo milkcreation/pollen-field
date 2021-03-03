@@ -57,7 +57,7 @@ class PasswordJsDriver extends FieldDriver implements PasswordJsDriverInterface
      */
     public function getEncrypter(): ?EncrypterInterface
     {
-        if (is_null($this->encrypter) && $this->field()->containerHas(EncrypterInterface::class)) {
+        if ($this->encrypter === null && $this->field()->containerHas(EncrypterInterface::class)) {
             $this->encrypter = $this->field()->containerGet(EncrypterInterface::class);
         }
 

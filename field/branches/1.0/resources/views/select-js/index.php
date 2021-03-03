@@ -7,7 +7,7 @@
 ?>
 <?php $this->before(); ?>
 <div <?php $this->attrs(); ?>>
-    <?php echo field('select', $this->get('handler', [])); ?>
+    <?php echo $this->field('select', $this->get('handler', [])); ?>
 
     <ul class="<?php echo $this->get('classes.selection'); ?>" data-control="select-js.selection">
         <?php foreach($choices as $choice) : ?>

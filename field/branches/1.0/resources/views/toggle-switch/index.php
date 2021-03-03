@@ -6,7 +6,7 @@
 <?php $this->before(); ?>
     <div <?php $this->attrs(); ?>>
         <div class="FieldToggleSwitch-wrapper">
-            <?php echo field('radio', [
+            <?php echo $this->field('radio', [
                 'after'   => (string)field('label', [
                     'content' => $this->get('label_on'),
                     'attrs'   => [
@@ -24,7 +24,7 @@
                 'checked' => (string)$this->get('value_on'),
             ]); ?>
 
-            <?php echo field('radio', [
+            <?php echo $this->field('radio', [
                 'after'   => (string)field('label', [
                     'content' => $this->get('label_off'),
                     'attrs'   => [

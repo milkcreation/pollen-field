@@ -7,7 +7,7 @@
 <div <?php echo $this->htmlAttrs($this->get('container.attrs', [])); ?>>
     <div <?php $this->attrs(); ?>>
         <div class="FieldFileJs-fallback fallback" data-control="file-js.fallback">
-            <?php echo field('file', ['name' => $this->getName(), 'multiple' => $this->get('multiple')]); ?>
+            <?php echo $this->field('file', ['name' => $this->getName(), 'multiple' => $this->get('multiple')]); ?>
         </div>
     </div>
 
