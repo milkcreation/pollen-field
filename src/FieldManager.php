@@ -133,7 +133,7 @@ class FieldManager implements FieldManagerInterface
     {
         $this->setConfig($config);
 
-        if (!is_null($container)) {
+        if ($container !== null) {
             $this->setContainer($container);
         }
 
@@ -337,13 +337,13 @@ class FieldManager implements FieldManagerInterface
                 return $driver->{$controller}(...$args);
             } catch (Exception $e) {
                 throw new NotFoundException(
-                    sprintf('PartialDriver [%s] Controller [%s] call return exception', $controller, $field)
+                    sprintf('FieldDriver [%s] Controller [%s] call return exception', $controller, $field)
                 );
             }
         }
 
         throw new NotFoundException(
-            sprintf('PartialDriver [%s] unreachable', $field)
+            sprintf('FieldDriver [%s] unreachable', $field)
         );
     }
 }

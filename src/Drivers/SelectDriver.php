@@ -41,9 +41,9 @@ class SelectDriver extends FieldDriver implements SelectDriverInterface
      */
     public function getValue()
     {
-        $value = $this->get('value', null);
+        $value = $this->get('value');
 
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 

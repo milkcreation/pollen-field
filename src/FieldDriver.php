@@ -333,7 +333,7 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function view(?string $view = null, array $data = [])
     {
-        if (is_null($this->viewEngine)) {
+        if ($this->viewEngine === null) {
             $directory = null;
             $overrideDir = null;
             $default = $this->field()->config('default.driver.viewer', []);

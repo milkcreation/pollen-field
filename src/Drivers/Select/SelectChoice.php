@@ -88,7 +88,7 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function hasParent(): bool
     {
-        return !is_null($this->get('parent'));
+        return $this->get('parent') !== null;
     }
 
     /**
@@ -130,8 +130,8 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function setSelected(array $selected): SelectChoiceInterface
     {
-        if (!is_null($selected)) {
-            if (!$this->isGroup() && in_array($this->getValue(), $selected)) {
+        if ($selected !== null) {
+            if (!$this->isGroup() && in_array($this->getValue(), $selected, true)) {
                 $this->push('attrs', 'selected');
             }
         }

@@ -4,7 +4,7 @@
  */
 ?>
 <?php $this->before(); ?>
-<?php echo field('text', [
+<?php echo $this->field('text', [
     'name'  => $this->getName(),
     'attrs' => $this->get('attrs', []),
     'value' => $this->getValue(),

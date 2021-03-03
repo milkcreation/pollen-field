@@ -4,7 +4,7 @@
  */
 ?>
 <?php $this->before(); ?>
-<?php echo field('select-js', [
+<?php echo $this->field('select-js', [
     'name'    => $this->getName(),
     'value'   => $this->getValue(),
     'attrs'   => $this->get('attrs', []),

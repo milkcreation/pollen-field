@@ -87,7 +87,7 @@ class RadioWalker implements RadioWalkerInterface
         $checked = $this->field->getValue();
         $collect = new Collection($this->items);
 
-        if (!is_null($checked)) {
+        if ($checked !== null) {
             $checked = Arr::wrap($checked);
 
             $collect->each(
