@@ -7,7 +7,7 @@ namespace Pollen\Field;
 use Closure;
 use InvalidArgumentException;
 use Pollen\Http\JsonResponse;
-use Pollen\Http\JsonResponseInterface;
+use Pollen\Http\ResponseInterface;
 use Pollen\Support\Concerns\BootableTrait;
 use Pollen\Support\Concerns\ParamsBagDelegateTrait;
 use Pollen\Support\Proxy\FieldProxy;
@@ -206,9 +206,9 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function getXhrUrl(array $params = []): string
+    public function getXhrUrl(array $params = [], ?string $controller = null): string
     {
-        return $this->field()->getXhrRouteUrl($this->getAlias(), null, $params);
+        return $this->field()->getXhrRouteUrl($this->getAlias(), $controller, $params);
     }
 
     /**
@@ -414,7 +414,7 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function xhrResponse(...$args): JsonResponseInterface
+    public function xhrResponse(...$args): ResponseInterface
     {
         return new JsonResponse([
             'success' => true,

@@ -7,7 +7,7 @@ namespace Pollen\Field\Drivers;
 use Illuminate\Support\Collection;
 use Pollen\Field\FieldDriver;
 use Pollen\Http\JsonResponse;
-use Pollen\Http\JsonResponseInterface;
+use Pollen\Http\ResponseInterface;
 
 class SuggestDriver extends FieldDriver implements SuggestDriverInterface
 {
@@ -140,7 +140,7 @@ class SuggestDriver extends FieldDriver implements SuggestDriverInterface
     /**
      * @inheritDoc
      */
-    public function xhrResponse(...$args): JsonResponseInterface
+    public function xhrResponse(...$args): ResponseInterface
     {
         $items = (new Collection($this->sample))
             ->filter(
