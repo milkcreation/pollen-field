@@ -7,7 +7,6 @@ namespace Pollen\Field;
 use Closure;
 use League\Route\Http\Exception\NotFoundException;
 use Pollen\Http\ResponseInterface;
-use Pollen\Routing\RouterInterface;
 use Pollen\Support\Concerns\BootableTraitInterface;
 use Pollen\Support\Concerns\ConfigBagAwareTraitInterface;
 use Pollen\Support\Proxy\ContainerProxyInterface;
@@ -89,9 +88,9 @@ interface FieldManagerInterface extends
     /**
      * Définition du chemin absolu vers le répertoire des ressources.
      *
-     * @return static
-     * @var string $resourceBaseDir
+     * @param string $resourceBaseDir
      *
+     * @return static
      */
     public function setResourcesBaseDir(string $resourceBaseDir): FieldManagerInterface;
 

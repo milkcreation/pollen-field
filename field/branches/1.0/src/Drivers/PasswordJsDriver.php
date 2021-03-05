@@ -8,7 +8,7 @@ use Pollen\Encryption\Encrypter;
 use Pollen\Encryption\EncrypterInterface;
 use Pollen\Field\FieldDriver;
 use Pollen\Http\JsonResponse;
-use Pollen\Http\JsonResponseInterface;
+use Pollen\Http\ResponseInterface;
 
 class PasswordJsDriver extends FieldDriver implements PasswordJsDriverInterface
 {
@@ -132,7 +132,7 @@ class PasswordJsDriver extends FieldDriver implements PasswordJsDriverInterface
     /**
      * @inheritDoc
      */
-    public function xhrResponse(...$args): JsonResponseInterface
+    public function xhrResponse(...$args): ResponseInterface
     {
         return new JsonResponse([
             'success' => true,

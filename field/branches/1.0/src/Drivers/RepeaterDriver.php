@@ -6,7 +6,7 @@ namespace Pollen\Field\Drivers;
 
 use Pollen\Field\FieldDriver;
 use Pollen\Http\JsonResponse;
-use Pollen\Http\JsonResponseInterface;
+use Pollen\Http\ResponseInterface;
 use Pollen\Support\Arr;
 
 class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
@@ -151,7 +151,7 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
     /**
      * @inheritDoc
      */
-    public function xhrResponse(...$args): JsonResponseInterface
+    public function xhrResponse(...$args): ResponseInterface
     {
         $request = $this->httpRequest();
 
