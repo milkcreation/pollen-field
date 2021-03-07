@@ -261,9 +261,9 @@ class FieldManager implements FieldManagerInterface
      */
     public function register(string $alias, $driverDefinition, ?Closure $registerCallback = null): FieldManagerInterface
     {
-        if (isset($this->driverDefinitions[$alias])) {
+        /*if (isset($this->driverDefinitions[$alias])) {
             throw new RuntimeException(sprintf('Another FieldDriver with alias [%s] already registered', $alias));
-        }
+        }*/
 
         $this->driverDefinitions[$alias] = $driverDefinition;
 
