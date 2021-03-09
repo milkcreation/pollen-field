@@ -11,7 +11,7 @@ use Pollen\Support\Proxy\RouterProxy;
 use RuntimeException;
 use League\Route\Http\Exception\NotFoundException;
 use Pollen\Field\Drivers\ButtonDriver;
-//use Pollen\Field\Drivers\CheckboxCollectionDriver;
+use Pollen\Field\Drivers\CheckboxCollectionDriver;
 use Pollen\Field\Drivers\CheckboxDriver;
 //use Pollen\Field\Drivers\ColorpickerDriver;
 //use Pollen\Field\Drivers\DatepickerDriver;
@@ -24,7 +24,7 @@ use Pollen\Field\Drivers\NumberDriver;
 //use Pollen\Field\Drivers\NumberJsDriver;
 use Pollen\Field\Drivers\PasswordDriver;
 //use Pollen\Field\Drivers\PasswordJsDriver;
-//use Pollen\Field\Drivers\RadioCollectionDriver;
+use Pollen\Field\Drivers\RadioCollectionDriver;
 use Pollen\Field\Drivers\RadioDriver;
 //use Pollen\Field\Drivers\RepeaterDriver;
 use Pollen\Field\Drivers\RequiredDriver;
@@ -66,7 +66,7 @@ class FieldManager implements FieldManagerInterface
     private $defaultDrivers = [
         'button'   => ButtonDriver::class,
         'checkbox' => CheckboxDriver::class,
-        //'checkbox-collection' => CheckboxCollectionDriver::class,
+        'checkbox-collection' => CheckboxCollectionDriver::class,
         //'colorpicker'         => ColorpickerDriver::class,
         //'datepicker'          => DatepickerDriver::class,
         //'datetime-js'         => DatetimeJsDriver::class,
@@ -79,7 +79,7 @@ class FieldManager implements FieldManagerInterface
         'password' => PasswordDriver::class,
         //'password-js'         => PasswordJsDriver::class,
         'radio'    => RadioDriver::class,
-        //'radio-collection'    => RadioCollectionDriver::class,
+        'radio-collection'    => RadioCollectionDriver::class,
         //'repeater'            => RepeaterDriver::class,
         'required' => RequiredDriver::class,
         //'select'              => SelectDriver::class,

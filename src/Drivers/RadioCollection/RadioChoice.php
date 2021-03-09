@@ -7,9 +7,12 @@ namespace Pollen\Field\Drivers\RadioCollection;
 use Pollen\Field\Drivers\LabelDriverInterface;
 use Pollen\Field\Drivers\RadioDriverInterface;
 use Pollen\Support\ParamsBag;
+use Pollen\Support\Proxy\FieldProxy;
 
 class RadioChoice extends ParamsBag implements RadioChoiceInterface
 {
+    use FieldProxy;
+
     /**
      * Compteur d'indice.
      * @var int
@@ -205,8 +208,8 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
             $this->set('label.attrs.for', 'FieldRadioCollection-itemInput--' . $this->index);
         }
 
-        $this->radio = Field::get('radio', $this->get('radio', []));
-        $this->label = Field::get('label', $this->get('label', []));
+        $this->radio = $this->field()->get('radio', $this->get('radio', []));
+        $this->label = $this->field()->get('label', $this->get('label', []));
     }
 
     /**
