@@ -7,9 +7,12 @@ namespace Pollen\Field\Drivers\CheckboxCollection;
 use Pollen\Field\Drivers\CheckboxDriverInterface;
 use Pollen\Field\Drivers\LabelDriverInterface;
 use Pollen\Support\ParamsBag;
+use Pollen\Support\Proxy\FieldProxy;
 
 class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
 {
+    use FieldProxy;
+
     /**
      * Compteur d'indice.
      * @var int
@@ -203,8 +206,8 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
             $this->set('label.attrs.for', 'FieldCheckboxCollection-itemInput--' . $this->index);
         }
 
-        $this->checkbox = Field::get('checkbox', $this->get('checkbox', []));
-        $this->label = Field::get('label', $this->get('label', []));
+        $this->checkbox = $this->field()->get('checkbox', $this->get('checkbox', []));
+        $this->label = $this->field()->get('label', $this->get('label', []));
     }
 
     /**
