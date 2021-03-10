@@ -60,5 +60,5 @@ interface RadioWalkerInterface
      *
      * @return RadioChoiceInterface
      */
-    public function setItem($item, $key = null): RadioChoiceInterface;
+    public function setItem($item, $key): RadioChoiceInterface;
 }

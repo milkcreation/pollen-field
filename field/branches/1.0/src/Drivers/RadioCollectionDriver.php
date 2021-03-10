@@ -40,6 +40,7 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
         if (!$choices instanceof RadioWalkerInterface) {
             $choices = new RadioWalker($choices);
         }
+
         $this->set('choices', $choices->setField($this)->build());
 
         return parent::render();

@@ -32,8 +32,9 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
     public function __construct(string $name, $attrs = [])
     {
         $this->name = $name;
-
         $this->set($attrs);
+
+        parent::__construct();
     }
 
     /**
@@ -169,7 +170,7 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function tagContent(): string
     {
-        return $this->getContent() ? $this->getContent() : '';
+        return $this->getContent() ? : '';
     }
 
     /**

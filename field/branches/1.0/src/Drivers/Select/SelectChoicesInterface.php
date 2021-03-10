@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\Select;
 
-//use tiFy\Contracts\Support\Collection;
-
-interface SelectChoicesInterface extends Collection
+interface SelectChoicesInterface
 {
     /**
      * Résolution de sortie de la classe sous la forme d'une chaîne de caractères.

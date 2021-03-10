@@ -35,12 +35,9 @@ class CheckboxWalker implements CheckboxWalkerInterface
      */
     public function __construct(array $items)
     {
-        array_walk(
-            $items,
-            function ($item, $key) {
-                $this->setItem($item, $key);
-            }
-        );
+        foreach($items as $key => $item) {
+            $this->setItem($item, $key);
+        }
     }
 
     /**

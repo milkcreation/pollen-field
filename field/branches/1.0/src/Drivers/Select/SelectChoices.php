@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Pollen\Field\Drivers\Select;
 
 use Illuminate\Support\Arr;
-//use tiFy\Support\Collection;
 
-class SelectChoices extends Collection implements SelectChoicesInterface
+class SelectChoices implements SelectChoicesInterface
 {
     /**
      * Liste des éléments.
@@ -79,14 +78,16 @@ class SelectChoices extends Collection implements SelectChoicesInterface
             /** @var SelectChoiceInterface $item */
             if ($item->getParent() !== $parent) {
                 continue;
-            } else {
-                $item->setDepth($depth)->parse()->setSelected($this->selected);
-
-                $output .= $item->tagOpen();
-                $output .= $item->tagContent();
-                $output .= $this->walker($items, ($depth + 1), $item->getName());
-                $output .= $item->tagClose();
             }
+
+            $item->setDepth($depth);
+            $item->parse();
+            $item->setSelected($this->selected);
+
+            $output .= $item->tagOpen();
+            $output .= $item->tagContent();
+            $output .= $this->walker($items, ($depth + 1), $item->getName());
+            $output .= $item->tagClose();
         }
         return $output;
     }
@@ -94,10 +95,10 @@ class SelectChoices extends Collection implements SelectChoicesInterface
     /**
      * @inheritdoc
      */
-    public function walk($item, $name = null): SelectChoiceInterface
+    public function walk($item, $name): SelectChoiceInterface
     {
         if (!$item instanceof SelectChoice) {
-            $item = new SelectChoice($name, $item);
+            $item = new SelectChoice((string)$name, $item);
         }
         return $this->items[] = $item;
     }
