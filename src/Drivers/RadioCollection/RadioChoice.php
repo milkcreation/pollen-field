@@ -81,6 +81,7 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
         } else {
             $this->set($attrs);
         }
+        parent::__construct();
     }
 
     /**
