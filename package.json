@@ -7,7 +7,7 @@
   },
   "author": "Jordy Manner",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "dropzone": "^5.5.1",
     "flatpickr": "^4.6.9"
   }
