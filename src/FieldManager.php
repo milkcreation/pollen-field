@@ -216,9 +216,11 @@ class FieldManager implements FieldManagerInterface
         if (!$driver->getAlias()) {
             $driver->setAlias($alias);
         }
+
         $params = array_merge($driver->defaultParams(), $this->config("driver.{$alias}", []), $params);
 
-        $driver->setIndex($index)->setId($id)->setParams($params)->boot();
+        $driver->setIndex($index)->setId($id)->setParams($params);
+        $driver->boot();
 
         return $this->drivers[$alias][$id] = $driver;
     }

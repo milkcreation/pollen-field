@@ -13,7 +13,7 @@ use Pollen\Support\Concerns\ParamsBagDelegateTrait;
 use Pollen\Support\Proxy\FieldProxy;
 use Pollen\Support\Proxy\HttpRequestProxy;
 use Pollen\Support\Proxy\PartialProxy;
-use Pollen\Support\HtmlAttrs;
+use Pollen\Support\Html;
 use Pollen\Support\Str;
 use Pollen\View\ViewEngine;
 use Pollen\View\ViewEngineInterface;
@@ -86,7 +86,7 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function attrs(): void
     {
-        echo HtmlAttrs::createFromAttrs($this->get('attrs', []));
+        echo Html::attr($this->get('attrs', []));
     }
 
     /**
