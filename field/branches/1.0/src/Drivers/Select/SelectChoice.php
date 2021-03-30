@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\Select;
 
-use Pollen\Support\HtmlAttrs;
+use Pollen\Support\Html;
 use Pollen\Support\ParamsBag;
 
 class SelectChoice extends ParamsBag implements SelectChoiceInterface
@@ -178,7 +178,7 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function tagOpen(): string
     {
-        $attrs = HtmlAttrs::createFromAttrs($this->get('attrs', []));
+        $attrs = Html::attr($this->get('attrs', []));
 
         return "\n" . str_repeat("\t", $this->depth) . ($this->isGroup() ? "<optgroup {$attrs}>" : "<option {$attrs}>");
     }
