@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Pollen\Field\Drivers;
 
 use Pollen\Field\Drivers\CheckboxCollection\CheckboxChoiceInterface;
-use Pollen\Field\Drivers\CheckboxCollection\CheckboxWalker;
-use Pollen\Field\Drivers\CheckboxCollection\CheckboxWalkerInterface;
+use Pollen\Field\Drivers\CheckboxCollection\CheckboxChoices;
+use Pollen\Field\Drivers\CheckboxCollection\CheckboxChoicesInterface;
 use Pollen\Field\FieldDriver;
+use Pollen\Field\FieldDriverInterface;
 
 class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollectionDriverInterface
 {
@@ -20,7 +21,7 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
             parent::defaultParams(),
             [
                 /**
-                 * @var array|CheckboxDriverInterface[]|CheckboxChoiceInterface[]|CheckboxWalkerInterface $choices Liste de choix.
+                 * @var array|CheckboxDriverInterface[]|CheckboxChoiceInterface[]|CheckboxChoicesInterface $choices
                  */
                 'choices' => [],
             ]
@@ -29,14 +30,13 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
 
     /**
      * @inheritDoc
-     *
-     * @todo utiliser self::parseAttrName
      */
-    public function getName(): string
+    public function parseAttrName(): FieldDriverInterface
     {
-        $name = $this->get('attrs.name') ?: $this->get('name');
-
-        return "{$name}[]";
+        if ($name = $this->get('name')) {
+            $this->set('attrs.name', "{$name}[]");
+        }
+        return $this;
     }
 
     /**
@@ -45,10 +45,10 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
     public function render(): string
     {
         $choices = $this->get('choices', []);
-        if (!$choices instanceof CheckboxWalkerInterface) {
-            $choices = new CheckboxWalker($choices);
+        if (!$choices instanceof CheckboxChoicesInterface) {
+            $choices = new CheckboxChoices($choices);
         }
-        $this->set('choices', $choices->setField($this)->build());
+        $this->set('choices', $choices->setCheckboxCollection($this)->build());
 
         return parent::render();
     }

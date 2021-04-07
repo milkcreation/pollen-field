@@ -6,9 +6,10 @@ namespace Pollen\Field\Drivers\RadioCollection;
 
 use Pollen\Field\Drivers\LabelDriverInterface;
 use Pollen\Field\Drivers\RadioDriverInterface;
-use Pollen\Support\ParamsBagInterface;
+use Pollen\Support\Concerns\BuildableTraitInterface;
+use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
 
-interface RadioChoiceInterface extends ParamsBagInterface
+interface RadioChoiceInterface extends BuildableTraitInterface, ParamsBagDelegateTraitInterface
 {
     /**
      * Résolution de sortie de la classe sous la forme d'une chaîne de caractères.
@@ -27,12 +28,12 @@ interface RadioChoiceInterface extends ParamsBagInterface
     /**
      * Récupération du l'identifiant de qualification de l'élément.
      *
-     * @return string|int
+     * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
-     * Récupération de l'intance du champ label.
+     * Récupération de l'instance du champ label.
      *
      * @return LabelDriverInterface
      */
@@ -46,7 +47,7 @@ interface RadioChoiceInterface extends ParamsBagInterface
     public function getNameAttr(): string;
 
     /**
-     * Récupération de l'intance du champ radio.
+     * Récupération de l'instance du champ radio.
      *
      * @return RadioDriverInterface
      */
@@ -90,11 +91,11 @@ interface RadioChoiceInterface extends ParamsBagInterface
     public function setChecked(): RadioChoiceInterface;
 
     /**
-     * Définition de l'instance du gestionnaire d'affichage de la liste des éléments.
+     * Définition de l'instance du gestionnaire de la liste de choix.
      *
-     * @param RadioWalkerInterface $walker
+     * @param RadioChoicesInterface $choices
      *
      * @return static
      */
-    public function setWalker(RadioWalkerInterface $walker): RadioChoiceInterface;
+    public function setChoices(RadioChoicesInterface $choices): RadioChoiceInterface;
 }

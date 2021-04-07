@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Pollen\Field\Drivers\CheckboxCollection;
 
 use Pollen\Field\Drivers\CheckboxCollectionDriverInterface;
+use Pollen\Field\Drivers\CheckboxDriverInterface;
+use Pollen\Support\Concerns\BuildableTraitInterface;
 
-interface CheckboxWalkerInterface
+interface CheckboxChoicesInterface extends BuildableTraitInterface
 {
     /**
      * Résolution de sortie de la classe en tant que chaîne de caractère.
@@ -20,7 +22,7 @@ interface CheckboxWalkerInterface
      *
      * @return static
      */
-    public function build(): CheckboxWalkerInterface;
+    public function build(): CheckboxChoicesInterface;
 
     /**
      * Vérification d'existance d'éléments.
@@ -34,7 +36,7 @@ interface CheckboxWalkerInterface
      *
      * @return static
      */
-    public function registerChecked(): CheckboxWalkerInterface;
+    public function registerChecked(): CheckboxChoicesInterface;
 
     /**
      * Récupération du rendu d'affichage de l'élément.
@@ -44,21 +46,21 @@ interface CheckboxWalkerInterface
     public function render(): string;
 
     /**
-     * Définition du controleur de champ associé.
+     * Définition de l'instance du champ de collection de case à cocher associé.
      *
-     * @param CheckboxCollectionDriverInterface $field
+     * @param CheckboxCollectionDriverInterface $checkboxCollection
      *
      * @return static
      */
-    public function setField(CheckboxCollectionDriverInterface $field): CheckboxWalkerInterface;
+    public function setCheckboxCollection(CheckboxCollectionDriverInterface $checkboxCollection): CheckboxChoicesInterface;
 
     /**
      * Définition d'un élément.
      *
-     * @param CheckboxChoiceInterface|array $item
-     * @param string|int $key
+     * @param string $key
+     * @param CheckboxChoiceInterface|CheckboxDriverInterface|array $choiceDef
      *
      * @return CheckboxChoiceInterface
      */
-    public function setItem($item, $key = null): CheckboxChoiceInterface;
+    public function setChoice(string $key, $choiceDef): CheckboxChoiceInterface;
 }

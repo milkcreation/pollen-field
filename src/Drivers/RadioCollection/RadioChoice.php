@@ -6,24 +6,21 @@ namespace Pollen\Field\Drivers\RadioCollection;
 
 use Pollen\Field\Drivers\LabelDriverInterface;
 use Pollen\Field\Drivers\RadioDriverInterface;
-use Pollen\Support\ParamsBag;
+use Pollen\Support\Concerns\BuildableTrait;
+use Pollen\Support\Concerns\ParamsBagDelegateTrait;
 use Pollen\Support\Proxy\FieldProxy;
 
-class RadioChoice extends ParamsBag implements RadioChoiceInterface
+class RadioChoice implements RadioChoiceInterface
 {
+    use BuildableTrait;
     use FieldProxy;
+    use ParamsBagDelegateTrait;
 
     /**
      * Compteur d'indice.
      * @var int
      */
     private static $_index = 0;
-
-    /**
-     * Indicateur d'initialisation.
-     * @var bool
-     */
-    private $built = false;
 
     /**
      * Nom de qualification.
@@ -51,37 +48,34 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
 
     /**
      * Instance du gestionnaire d'affichage de la liste des éléments.
-     * @var RadioWalkerInterface
+     * @var RadioChoicesInterface
      */
-    protected $walker;
+    protected $choices;
 
     /**
-     * CONSTRUCTEUR.
-     *
-     * @param string|int $id Identifiant de qualification.
-     * @param array|string $attrs Liste des attributs de configuration.
+     * @param string $id Identifiant de qualification.
+     * @param array|string|RadioDriverInterface $radioDef
      *
      * @return void
      */
-    public function __construct($id, $attrs)
+    public function __construct(string $id, $radioDef)
     {
         $this->id = $id;
         $this->index = self::$_index++;
 
-        if (is_string($attrs)) {
-            $attrs = [
+        if (is_string($radioDef)) {
+            $radioDef = [
                 'label' => [
-                    'content' => $attrs,
+                    'content' => $radioDef,
                 ],
             ];
         }
 
-        if ($attrs instanceof RadioDriverInterface) {
-            $this->radio = $attrs;
+        if ($radioDef instanceof RadioDriverInterface) {
+            $this->radio = $radioDef;
         } else {
-            $this->set($attrs);
+            $this->set(array_merge($this->defaults(), $radioDef));
         }
-        parent::__construct();
     }
 
     /**
@@ -97,10 +91,10 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
      */
     public function build(): RadioChoiceInterface
     {
-        if (!$this->built) {
+        if (!$this->isBuilt()) {
             $this->parse();
 
-            $this->built = true;
+            $this->setBuilt();
         }
 
         return $this;
@@ -133,7 +127,7 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
     /**
      * @inheritDoc
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -183,8 +177,6 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
      */
     public function parse(): void
     {
-        parent::parse();
-
         if (!$this->get('attrs.id')) {
             $this->set('attrs.id', 'FieldRadioCollection-item--' . $this->index);
         }
@@ -247,9 +239,9 @@ class RadioChoice extends ParamsBag implements RadioChoiceInterface
     /**
      * @inheritDoc
      */
-    public function setWalker(RadioWalkerInterface $walker): RadioChoiceInterface
+    public function setChoices(RadioChoicesInterface $choices): RadioChoiceInterface
     {
-        $this->walker = $walker;
+        $this->choices = $choices;
 
         return $this;
     }

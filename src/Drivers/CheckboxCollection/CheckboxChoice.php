@@ -6,24 +6,21 @@ namespace Pollen\Field\Drivers\CheckboxCollection;
 
 use Pollen\Field\Drivers\CheckboxDriverInterface;
 use Pollen\Field\Drivers\LabelDriverInterface;
-use Pollen\Support\ParamsBag;
+use Pollen\Support\Concerns\BuildableTrait;
+use Pollen\Support\Concerns\ParamsBagDelegateTrait;
 use Pollen\Support\Proxy\FieldProxy;
 
-class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
+class CheckboxChoice implements CheckboxChoiceInterface
 {
+    use BuildableTrait;
     use FieldProxy;
+    use ParamsBagDelegateTrait;
 
     /**
      * Compteur d'indice.
      * @var int
      */
     private static $_index = 0;
-
-    /**
-     * Indicateur d'initialisation.
-     * @var bool
-     */
-    private $built = false;
 
     /**
      * Instance de la case à cocher.
@@ -33,7 +30,7 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
 
     /**
      * Identifiant de qualification.
-     * @var string|int
+     * @var string
      */
     protected $id = '';
 
@@ -51,35 +48,33 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
 
     /**
      * Instance du gestionnaire d'affichage de la liste des éléments.
-     * @var CheckboxWalkerInterface
+     * @var CheckboxChoicesInterface
      */
-    protected $walker;
+    protected $choices;
 
     /**
-     * CONSTRUCTEUR.
-     *
-     * @param string|int $id Identifiant de qualification.
-     * @param array|string $attrs Liste des attributs de configuration.
+     * @param string $id Identifiant de qualification.
+     * @param array|string|CheckboxDriverInterface $checkboxDef
      *
      * @return void
      */
-    public function __construct($id, $attrs)
+    public function __construct(string $id, $checkboxDef)
     {
         $this->id = $id;
         $this->index = self::$_index++;
 
-        if (is_string($attrs)) {
-            $attrs = [
+        if (is_string($checkboxDef)) {
+            $checkboxDef = [
                 'label' => [
-                    'content' => $attrs,
+                    'content' => $checkboxDef,
                 ],
             ];
         }
 
-        if ($attrs instanceof CheckboxDriverInterface) {
-            $this->checkbox = $attrs;
+        if ($checkboxDef instanceof CheckboxDriverInterface) {
+            $this->checkbox = $checkboxDef;
         } else {
-            $this->set($attrs);
+            $this->set(array_merge($this->defaults(), $checkboxDef));
         }
     }
 
@@ -96,11 +91,12 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
      */
     public function build(): CheckboxChoiceInterface
     {
-        if (!$this->built) {
+        if (!$this->isBuilt()) {
             $this->parse();
 
-            $this->built = true;
+            $this->setBuilt();
         }
+
         return $this;
     }
 
@@ -138,7 +134,7 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
     /**
      * @inheritDoc
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -180,8 +176,6 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
      */
     public function parse(): void
     {
-        parent::parse();
-
         if (!$this->get('attrs.id')) {
             $this->set('attrs.id', 'FieldCheckboxCollection-item--' . $this->index);
         }
@@ -245,9 +239,9 @@ class CheckboxChoice extends ParamsBag implements CheckboxChoiceInterface
     /**
      * @inheritDoc
      */
-    public function setWalker(CheckboxWalkerInterface $walker): CheckboxChoiceInterface
+    public function setChoices(CheckboxChoicesInterface $choices): CheckboxChoiceInterface
     {
-        $this->walker = $walker;
+        $this->choices = $choices;
 
         return $this;
     }
