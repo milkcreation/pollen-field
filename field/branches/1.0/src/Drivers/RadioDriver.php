@@ -6,6 +6,7 @@ namespace Pollen\Field\Drivers;
 
 use Pollen\Field\FieldDriver;
 use Pollen\Field\FieldDriverInterface;
+use Pollen\Support\Arr;
 
 class RadioDriver extends FieldDriver implements RadioDriverInterface
 {
@@ -18,7 +19,7 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
             parent::defaultParams(),
             [
                 /**
-                 * @var bool|string $checked Activation de la selection.
+                 * @var string $checked Valeur de sélection du bouton radio.
                  */
                 'checked' => 'on',
             ]
@@ -30,14 +31,8 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
      */
     public function isChecked(): bool
     {
-        $checked = $this->get('checked', false);
-
-        if (is_bool($checked)) {
-            return $checked;
-        }
-
-        if ($this->has('value')) {
-            return in_array($checked, (array)$this->getValue(), true);
+        if ($this->getValue()) {
+            return in_array($this->get('checked'), $this->getValue(), true);
         }
 
         return false;
@@ -48,13 +43,17 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
      */
     public function parseAttrValue(): FieldDriverInterface
     {
-        if (($value = $this->get('checked')) && !is_bool($value)) {
-            $this->set('attrs.value', $value);
+        if ($value = $this->get('value')) {
+            $this->set('value', Arr::wrap($value));
+        }
+
+        if ($this->get('checked') !== null) {
+            $this->set('attrs.value', (string)$this->get('checked'));
 
             return $this;
         }
 
-        return parent::parseAttrValue();
+        return $this;
     }
 
     /**
@@ -67,6 +66,7 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
         if ($this->isChecked()) {
             $this->push('attrs', 'checked');
         }
+
         return parent::render();
     }
 

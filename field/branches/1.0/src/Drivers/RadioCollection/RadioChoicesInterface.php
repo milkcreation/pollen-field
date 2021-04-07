@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Pollen\Field\Drivers\RadioCollection;
 
 use Pollen\Field\Drivers\RadioCollectionDriverInterface;
+use Pollen\Field\Drivers\RadioDriverInterface;
+use Pollen\Support\Concerns\BuildableTraitInterface;
 
-interface RadioWalkerInterface
+interface RadioChoicesInterface extends BuildableTraitInterface
 {
     /**
      * Résolution de sortie de la classe en tant que chaîne de caractère.
@@ -20,10 +22,10 @@ interface RadioWalkerInterface
      *
      * @return static
      */
-    public function build(): RadioWalkerInterface;
+    public function build(): RadioChoicesInterface;
 
     /**
-     * Vérification d'existance d'éléments.
+     * Vérification d'existence d'éléments.
      *
      * @return bool
      */
@@ -34,7 +36,7 @@ interface RadioWalkerInterface
      *
      * @return static
      */
-    public function registerChecked(): RadioWalkerInterface;
+    public function registerChecked(): RadioChoicesInterface;
 
     /**
      * Récupération du rendu d'affichage de l'élément.
@@ -44,21 +46,21 @@ interface RadioWalkerInterface
     public function render(): string;
 
     /**
-     * Définition du controleur de champ associé.
+     * Définition de l'instance de champ radio collection associé.
      *
-     * @param RadioCollectionDriverInterface $field
+     * @param RadioCollectionDriverInterface $radioCollection
      *
      * @return static
      */
-    public function setField(RadioCollectionDriverInterface $field): RadioWalkerInterface;
+    public function setRadioCollection(RadioCollectionDriverInterface $radioCollection): RadioChoicesInterface;
 
     /**
      * Définition d'un élément.
      *
-     * @param RadioChoiceInterface|array $item
-     * @param string|int $key
+     * @param string $key
+     * @param RadioChoiceInterface|RadioDriverInterface|array $choiceDef
      *
      * @return RadioChoiceInterface
      */
-    public function setItem($item, $key): RadioChoiceInterface;
+    public function setChoice(string $key, $choiceDef): RadioChoiceInterface;
 }

@@ -144,13 +144,21 @@ abstract class FieldDriver implements FieldDriverInterface
                  */
                 'before' => '',
                 /**
+                 * @var string|null $name Nom de qualification de la requête HTTP de soumission du formulaire.
+                 */
+                'name' => null,
+                /**
+                 * @var string|null $value Valeur courante|Issue de la requête HTTP de soumission du formulaire.
+                 */
+                'value' => null,
+                /**
                  * @var array $viewer Liste des attributs de configuration du pilote d'affichage.
                  */
                 'viewer' => [],
                 /**
                  * @var Closure|array|string|null
                  */
-                'render' => null,
+                'render' => null
             ]
         );
     }

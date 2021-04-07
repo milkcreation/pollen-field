@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Pollen\Field\Drivers;
 
 use Pollen\Field\Drivers\RadioCollection\RadioChoiceInterface;
-use Pollen\Field\Drivers\RadioCollection\RadioWalker;
-use Pollen\Field\Drivers\RadioCollection\RadioWalkerInterface;
+use Pollen\Field\Drivers\RadioCollection\RadioChoices;
+use Pollen\Field\Drivers\RadioCollection\RadioChoicesInterface;
 use Pollen\Field\FieldDriver;
 
 class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriverInterface
@@ -20,11 +20,7 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
             parent::defaultParams(),
             [
                 /**
-                 * @var string|array|bool $default Valeur de sélection par défaut. Aucune si false|La première si true|Valeur(s) par défaut.
-                 */
-                'default' => false,
-                /**
-                 * @var array|RadioDriverInterface[]|RadioChoiceInterface[]|RadioWalkerInterface $choices
+                 * @var array|RadioDriverInterface[]|RadioChoiceInterface[]|RadioChoicesInterface $choices
                  */
                 'choices' => [],
             ]
@@ -37,11 +33,11 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
     public function render(): string
     {
         $choices = $this->get('choices', []);
-        if (!$choices instanceof RadioWalkerInterface) {
-            $choices = new RadioWalker($choices);
+        if (!$choices instanceof RadioChoicesInterface) {
+            $choices = new RadioChoices($choices);
         }
 
-        $this->set('choices', $choices->setField($this)->build());
+        $this->set('choices', $choices->setRadioCollection($this)->build());
 
         return parent::render();
     }

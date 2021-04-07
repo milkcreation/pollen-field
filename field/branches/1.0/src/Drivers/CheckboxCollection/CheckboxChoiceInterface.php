@@ -6,9 +6,10 @@ namespace Pollen\Field\Drivers\CheckboxCollection;
 
 use Pollen\Field\Drivers\CheckboxDriverInterface;
 use Pollen\Field\Drivers\LabelDriverInterface;
-use Pollen\Support\ParamsBagInterface;
+use Pollen\Support\Concerns\BuildableTraitInterface;
+use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
 
-interface CheckboxChoiceInterface extends ParamsBagInterface
+interface CheckboxChoiceInterface extends BuildableTraitInterface, ParamsBagDelegateTraitInterface
 {
     /**
      * Résolution de sortie de la classe sous la forme d'une chaîne de caractères.
@@ -25,7 +26,7 @@ interface CheckboxChoiceInterface extends ParamsBagInterface
     public function build(): CheckboxChoiceInterface;
 
     /**
-     * Récupération de l'intance de la checkbox.
+     * Récupération de l'instance de la checkbox.
      *
      * @return CheckboxDriverInterface
      */
@@ -34,12 +35,12 @@ interface CheckboxChoiceInterface extends ParamsBagInterface
     /**
      * Récupération du l'identifiant de qualification de l'élément.
      *
-     * @return string|int
+     * @return string
      */
-    public function getId();
+    public function getId(): string;
 
     /**
-     * Récupération de l'intance du label.
+     * Récupération de l'instance du champ label.
      *
      * @return LabelDriverInterface
      */
@@ -90,11 +91,11 @@ interface CheckboxChoiceInterface extends ParamsBagInterface
     public function setChecked(): CheckboxChoiceInterface;
 
     /**
-     * Définition de l'instance du gestionnaire d'affichage de la liste des éléments.
+     * Définition de l'instance du gestionnaire de la liste de choix.
      *
-     * @param CheckboxWalkerInterface $walker
+     * @param CheckboxChoicesInterface $choices
      *
      * @return static
      */
-    public function setWalker(CheckboxWalkerInterface $walker): CheckboxChoiceInterface;
+    public function setChoices(CheckboxChoicesInterface $choices): CheckboxChoiceInterface;
 }
