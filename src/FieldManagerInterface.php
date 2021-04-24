@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Pollen\Field;
 
 use Closure;
-use League\Route\Http\Exception\NotFoundException;
 use Pollen\Http\ResponseInterface;
 use Pollen\Support\Concerns\BootableTraitInterface;
 use Pollen\Support\Concerns\ConfigBagAwareTraitInterface;
+use Pollen\Support\Concerns\ResourcesAwareTraitInterface;
 use Pollen\Support\Proxy\ContainerProxyInterface;
 use Pollen\Support\Proxy\RouterProxyInterface;
+use Pollen\Routing\Exception\NotFoundException;
 
 interface FieldManagerInterface extends
     BootableTraitInterface,
     ConfigBagAwareTraitInterface,
+    ResourcesAwareTraitInterface,
     ContainerProxyInterface,
     RouterProxyInterface
 {
@@ -75,24 +77,6 @@ interface FieldManagerInterface extends
      * @return static
      */
     public function registerDefaultDrivers(): FieldManagerInterface;
-
-    /**
-     * Chemin absolu vers une ressource (fichier|répertoire).
-     *
-     * @param string|null $path Chemin relatif vers la ressource.
-     *
-     * @return string
-     */
-    public function resources(?string $path = null): string;
-
-    /**
-     * Définition du chemin absolu vers le répertoire des ressources.
-     *
-     * @param string $resourceBaseDir
-     *
-     * @return static
-     */
-    public function setResourcesBaseDir(string $resourceBaseDir): FieldManagerInterface;
 
     /**
      * Répartiteur de traitement d'une requête XHR.

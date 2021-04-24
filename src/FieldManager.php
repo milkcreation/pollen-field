@@ -7,57 +7,50 @@ namespace Pollen\Field;
 use Closure;
 use Exception;
 use InvalidArgumentException;
+use Pollen\Support\Concerns\ResourcesAwareTrait;
 use Pollen\Support\Proxy\RouterProxy;
-use RuntimeException;
-use League\Route\Http\Exception\NotFoundException;
 use Pollen\Field\Drivers\ButtonDriver;
 use Pollen\Field\Drivers\CheckboxCollectionDriver;
 use Pollen\Field\Drivers\CheckboxDriver;
-
 //use Pollen\Field\Drivers\ColorpickerDriver;
 //use Pollen\Field\Drivers\DatepickerDriver;
 //use Pollen\Field\Drivers\DatetimeJsDriver;
 use Pollen\Field\Drivers\FileDriver;
-
 //use Pollen\Field\Drivers\FileJsDriver;
 use Pollen\Field\Drivers\HiddenDriver;
 use Pollen\Field\Drivers\LabelDriver;
 use Pollen\Field\Drivers\NumberDriver;
-
 //use Pollen\Field\Drivers\NumberJsDriver;
 use Pollen\Field\Drivers\PasswordDriver;
-
 //use Pollen\Field\Drivers\PasswordJsDriver;
 use Pollen\Field\Drivers\RadioCollectionDriver;
 use Pollen\Field\Drivers\RadioDriver;
-
 //use Pollen\Field\Drivers\RepeaterDriver;
 use Pollen\Field\Drivers\RequiredDriver;
 use Pollen\Field\Drivers\SelectDriver;
-
 //use Pollen\Field\Drivers\SelectImageDriver;
 //use Pollen\Field\Drivers\SelectJsDriver;
 //use Pollen\Field\Drivers\SubmitDriver;
 //use Pollen\Field\Drivers\SuggestDriver;
 use Pollen\Field\Drivers\TextareaDriver;
 use Pollen\Field\Drivers\TextDriver;
-
 //use Pollen\Field\Drivers\TextRemainingDriver;
 //use Pollen\Field\Drivers\TinymceDriver;
 //use Pollen\Field\Drivers\ToggleSwitchDriver;
 use Pollen\Http\ResponseInterface;
 use Pollen\Routing\RouteInterface;
-use Pollen\Support\Filesystem;
 use Pollen\Support\Concerns\BootableTrait;
 use Pollen\Support\Concerns\ConfigBagAwareTrait;
 use Pollen\Support\Exception\ManagerRuntimeException;
 use Pollen\Support\Proxy\ContainerProxy;
+use Pollen\Routing\Exception\NotFoundException;
 use Psr\Container\ContainerInterface as Container;
 
 class FieldManager implements FieldManagerInterface
 {
     use BootableTrait;
     use ConfigBagAwareTrait;
+    use ResourcesAwareTrait;
     use ContainerProxy;
     use RouterProxy;
 
@@ -115,12 +108,6 @@ class FieldManager implements FieldManagerInterface
     protected $driverDefinitions = [];
 
     /**
-     * Chemin vers le répertoire des ressources.
-     * @var string|null
-     */
-    protected $resourcesBaseDir;
-
-    /**
      * Route de traitement des requêtes XHR.
      * @var RouteInterface|null
      */
@@ -137,6 +124,8 @@ class FieldManager implements FieldManagerInterface
         if ($container !== null) {
             $this->setContainer($container);
         }
+
+        $this->setResourcesBaseDir(dirname(__DIR__) . '/resources');
 
         if ($this->config('boot_enabled', true)) {
             $this->boot();
@@ -218,7 +207,7 @@ class FieldManager implements FieldManagerInterface
             $driver->setAlias($alias);
         }
 
-        $params = array_merge($driver->defaultParams(), $this->config("driver.{$alias}", []), $params);
+        $params = array_merge($driver->defaultParams(), $this->config("driver.$alias", []), $params);
 
         $driver->setIndex($index)->setId($id)->setParams($params);
         $driver->boot();
@@ -297,43 +286,15 @@ class FieldManager implements FieldManagerInterface
     /**
      * @inheritDoc
      */
-    public function resources(?string $path = null): string
-    {
-        if ($this->resourcesBaseDir === null) {
-            $this->resourcesBaseDir = Filesystem::normalizePath(
-                realpath(
-                    dirname(__DIR__) . '/resources/'
-                )
-            );
-
-            if (!file_exists($this->resourcesBaseDir)) {
-                throw new RuntimeException('Field ressources directory unreachable');
-            }
-        }
-
-        return is_null($path) ? $this->resourcesBaseDir : $this->resourcesBaseDir . Filesystem::normalizePath($path);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setResourcesBaseDir(string $resourceBaseDir): FieldManagerInterface
-    {
-        $this->resourcesBaseDir = Filesystem::normalizePath($resourceBaseDir);
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function xhrResponseDispatcher(string $field, string $controller, ...$args): ResponseInterface
     {
         try {
             $driver = $this->get($field);
         } catch (Exception $e) {
             throw new NotFoundException(
-                sprintf('FieldDriver [%s] return exception : %s', $field, $e->getMessage())
+                sprintf('FieldDriver [%s] return exception : %s', $field, $e->getMessage()),
+                'FieldDriver Error',
+                $e
             );
         }
 
@@ -342,13 +303,16 @@ class FieldManager implements FieldManagerInterface
                 return $driver->{$controller}(...$args);
             } catch (Exception $e) {
                 throw new NotFoundException(
-                    sprintf('FieldDriver [%s] Controller [%s] call return exception', $controller, $field)
+                    sprintf('FieldDriver [%s] Controller [%s] call return exception', $controller, $field),
+                    'FieldDriver Error',
+                    $e
                 );
             }
         }
 
         throw new NotFoundException(
-            sprintf('FieldDriver [%s] unreachable', $field)
+            sprintf('FieldDriver [%s] unreachable', $field),
+            'FieldDriver Error'
         );
     }
 }
