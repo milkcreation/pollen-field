@@ -7,6 +7,8 @@ namespace Pollen\Field\Drivers;
 use Pollen\Field\Drivers\SelectJs\SelectJsChoices;
 use Pollen\Field\Drivers\SelectJs\SelectJsChoicesInterface;
 use Pollen\Field\FieldDriver;
+use Pollen\Http\JsonResponse;
+use Pollen\Http\ResponseInterface;
 use Pollen\Support\Arr;
 use Pollen\Support\ParamsBag;
 
@@ -224,27 +226,23 @@ class SelectJsDriver extends FieldDriver implements SelectJsDriverInterface
     }
 
     /**
-     * Génération de réponse HTTP via un requête XHR.
-     *
-     * @param array ...$args Liste de variables passées en arguments à la requête.
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function xhrResponse(...$args): array
+    public function xhrResponse(...$args): ResponseInterface
     {
-        $this->set('viewer', request()->input('_viewer', []));
+        $this->set('viewer', $this->httpRequest()->input('_viewer', []));
 
         /** @var SelectJsChoices $choices */
-        $choices_cb = Arr::stripslashes(request()->post('_choices_cb'));
-        $choices = new $choices_cb(ParamsBag::createFromAttrs(request()->post('args', [])));
+        $choices_cb = Arr::stripslashes($this->httpRequest()->input('_choices_cb'));
+        $choices = new $choices_cb(ParamsBag::createFromAttrs($this->httpRequest()->input('args', [])));
         $choices->setField($this);
 
         $items = $choices->all();
         array_walk($items, [$choices, 'setItem']);
 
-        return [
+        return new JsonResponse([
             'success' => true,
             'data'    => $items,
-        ];
+        ]);
     }
 }

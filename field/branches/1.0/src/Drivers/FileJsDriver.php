@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers;
 
+use Pollen\Http\JsonResponse;
+use Pollen\Http\ResponseInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Pollen\Field\FieldDriver;
 use tiFy\Filesystem\StorageManager;
@@ -99,20 +101,19 @@ class FileJsDriver extends FieldDriver implements FileJsDriverInterface
     /**
      * @inheritDoc
      */
-    public function xhrResponse(...$args): array
+    public function xhrResponse(...$args): ResponseInterface
     {
-        $filesystem = (new StorageManager())->local(request()->input('_dir'));
+        $filesystem = (new StorageManager())->local($this->httpRequest()->input('_dir'));
 
-        foreach (request()->files as $key => $f) {
+        foreach ($this->httpRequest()->files as $key => $f) {
             /** @var UploadedFile $f */
             $filesystem->put($f->getClientOriginalName(), file_get_contents($f->getPathname()));
         }
 
-        return [
+        return new JsonResponse([
             'success' => true,
-        ];
+        ]);
     }
-
 
     /**
      * @inheritDoc

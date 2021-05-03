@@ -7,7 +7,6 @@ namespace Pollen\Field\Drivers\SelectImage;
 use Symfony\Component\Finder\Finder;
 use Pollen\Field\Drivers\SelectJs\SelectJsChoices;
 use Pollen\Field\Drivers\SelectImageDriverInterface;
-//use tiFy\Support\Img;
 
 class SelectImageChoices extends SelectJsChoices implements SelectImageChoicesInterface
 {
