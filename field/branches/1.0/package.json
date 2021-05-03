@@ -10,5 +10,9 @@
   "devDependencies": {
     "dropzone": "^5.5.1",
     "flatpickr": "^4.6.9"
+  },
+  "dependencies": {
+    "@pollen-solutions/support": "file:../partial/",
+    "@pollen-solutions/support": "file:../support/"
   }
 }
