@@ -12,31 +12,31 @@ use Pollen\Support\Proxy\RouterProxy;
 use Pollen\Field\Drivers\ButtonDriver;
 use Pollen\Field\Drivers\CheckboxCollectionDriver;
 use Pollen\Field\Drivers\CheckboxDriver;
-//use Pollen\Field\Drivers\ColorpickerDriver;
-//use Pollen\Field\Drivers\DatepickerDriver;
-//use Pollen\Field\Drivers\DatetimeJsDriver;
+use Pollen\Field\Drivers\ColorpickerDriver;
+use Pollen\Field\Drivers\DatepickerDriver;
+use Pollen\Field\Drivers\DatetimeJsDriver;
 use Pollen\Field\Drivers\FileDriver;
-//use Pollen\Field\Drivers\FileJsDriver;
+use Pollen\Field\Drivers\FileJsDriver;
 use Pollen\Field\Drivers\HiddenDriver;
 use Pollen\Field\Drivers\LabelDriver;
 use Pollen\Field\Drivers\NumberDriver;
-//use Pollen\Field\Drivers\NumberJsDriver;
+use Pollen\Field\Drivers\NumberJsDriver;
 use Pollen\Field\Drivers\PasswordDriver;
-//use Pollen\Field\Drivers\PasswordJsDriver;
+use Pollen\Field\Drivers\PasswordJsDriver;
 use Pollen\Field\Drivers\RadioCollectionDriver;
 use Pollen\Field\Drivers\RadioDriver;
-//use Pollen\Field\Drivers\RepeaterDriver;
+use Pollen\Field\Drivers\RepeaterDriver;
 use Pollen\Field\Drivers\RequiredDriver;
 use Pollen\Field\Drivers\SelectDriver;
-//use Pollen\Field\Drivers\SelectImageDriver;
-//use Pollen\Field\Drivers\SelectJsDriver;
-//use Pollen\Field\Drivers\SubmitDriver;
-//use Pollen\Field\Drivers\SuggestDriver;
+use Pollen\Field\Drivers\SelectImageDriver;
+use Pollen\Field\Drivers\SelectJsDriver;
+use Pollen\Field\Drivers\SubmitDriver;
+use Pollen\Field\Drivers\SuggestDriver;
 use Pollen\Field\Drivers\TextareaDriver;
 use Pollen\Field\Drivers\TextDriver;
-//use Pollen\Field\Drivers\TextRemainingDriver;
-//use Pollen\Field\Drivers\TinymceDriver;
-//use Pollen\Field\Drivers\ToggleSwitchDriver;
+use Pollen\Field\Drivers\TextRemainingDriver;
+use Pollen\Field\Drivers\TinymceDriver;
+use Pollen\Field\Drivers\ToggleSwitchDriver;
 use Pollen\Http\ResponseInterface;
 use Pollen\Routing\RouteInterface;
 use Pollen\Support\Concerns\BootableTrait;
@@ -68,31 +68,31 @@ class FieldManager implements FieldManagerInterface
         'button'              => ButtonDriver::class,
         'checkbox'            => CheckboxDriver::class,
         'checkbox-collection' => CheckboxCollectionDriver::class,
-        //'colorpicker'         => ColorpickerDriver::class,
-        //'datepicker'          => DatepickerDriver::class,
-        //'datetime-js'         => DatetimeJsDriver::class,
+        'colorpicker'         => ColorpickerDriver::class,
+        'datepicker'          => DatepickerDriver::class,
+        'datetime-js'         => DatetimeJsDriver::class,
         'file'                => FileDriver::class,
-        //'file-js'             => FileJsDriver::class,
+        'file-js'             => FileJsDriver::class,
         'hidden'              => HiddenDriver::class,
         'label'               => LabelDriver::class,
         'number'              => NumberDriver::class,
-        //'number-js'           => NumberJsDriver::class,
+        'number-js'           => NumberJsDriver::class,
         'password'            => PasswordDriver::class,
-        //'password-js'         => PasswordJsDriver::class,
+        'password-js'         => PasswordJsDriver::class,
         'radio'               => RadioDriver::class,
         'radio-collection'    => RadioCollectionDriver::class,
-        //'repeater'            => RepeaterDriver::class,
+        'repeater'            => RepeaterDriver::class,
         'required'            => RequiredDriver::class,
         'select'              => SelectDriver::class,
-        //'select-image'        => SelectImageDriver::class,
-        //'select-js'           => SelectJsDriver::class,
-        //'submit'              => SubmitDriver::class,
-        //'suggest'             => SuggestDriver::class,
+        'select-image'        => SelectImageDriver::class,
+        'select-js'           => SelectJsDriver::class,
+        'submit'              => SubmitDriver::class,
+        'suggest'             => SuggestDriver::class,
         'text'                => TextDriver::class,
         'textarea'            => TextareaDriver::class,
-        //'text-remaining'      => TextRemainingDriver::class,
-        //'tinymce'             => TinymceDriver::class,
-        //'toggle-switch'       => ToggleSwitchDriver::class,
+        'text-remaining'      => TextRemainingDriver::class,
+        'tinymce'             => TinymceDriver::class,
+        'toggle-switch'       => ToggleSwitchDriver::class,
     ];
 
     /**
