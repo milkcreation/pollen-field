@@ -25,18 +25,11 @@ interface CheckboxChoicesInterface extends BuildableTraitInterface
     public function build(): CheckboxChoicesInterface;
 
     /**
-     * Vérification d'existance d'éléments.
+     * Récupération de l'instance du champ de collection de cases à cocher associées.
      *
-     * @return bool
+     * @return CheckboxCollectionDriverInterface|null
      */
-    public function exists(): bool;
-
-    /**
-     * Déclaration des éléments sélectionnés.
-     *
-     * @return static
-     */
-    public function registerChecked(): CheckboxChoicesInterface;
+    public function collector(): ?CheckboxCollectionDriverInterface;
 
     /**
      * Récupération du rendu d'affichage de l'élément.
@@ -48,11 +41,11 @@ interface CheckboxChoicesInterface extends BuildableTraitInterface
     /**
      * Définition de l'instance du champ de collection de case à cocher associé.
      *
-     * @param CheckboxCollectionDriverInterface $checkboxCollection
+     * @param CheckboxCollectionDriverInterface $collector
      *
      * @return static
      */
-    public function setCheckboxCollection(CheckboxCollectionDriverInterface $checkboxCollection): CheckboxChoicesInterface;
+    public function setCollector(CheckboxCollectionDriverInterface $collector): CheckboxChoicesInterface;
 
     /**
      * Définition d'un élément.

@@ -22,7 +22,7 @@ class TextareaDriver extends FieldDriver implements TextareaDriverInterface
      */
     public function render(): string
     {
-        $this->set('content', $this->get('value'));
+        $this->set('content', $this->getValue());
 
         return parent::render();
     }

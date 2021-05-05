@@ -94,6 +94,17 @@ class RadioChoice implements RadioChoiceInterface
         if (!$this->isBuilt()) {
             $this->parse();
 
+            if ($collector = $this->choices->collector()) {
+                $name = $collector->getName();
+                $this->radio->set('attrs.name', $name);
+
+                $values = $collector->getCheckedValues();
+                $value = $this->radio->getValue();
+                if (in_array($value, $values, true)) {
+                    $this->radio->setCheckedValue($value);
+                }
+            }
+
             $this->setBuilt();
         }
 
@@ -106,18 +117,10 @@ class RadioChoice implements RadioChoiceInterface
     public function defaults(): array
     {
         return [
-            'label' => [
-                'before'  => '',
-                'after'   => '',
-                'content' => '',
-                'attrs'   => [],
-            ],
+            /** @see \Pollen\Field\Drivers\LabelDriverInterface */
+            'label' => [],
+            /** @see \Pollen\Field\Drivers\RadioDriverInterface */
             'radio' => [
-                'before'  => '',
-                'after'   => '',
-                'attrs'   => [],
-                'name'    => '',
-                'value'   => '',
                 'checked' => $this->id,
             ],
 
@@ -143,33 +146,9 @@ class RadioChoice implements RadioChoiceInterface
     /**
      * @inheritDoc
      */
-    public function getNameAttr(): string
-    {
-        return $this->getRadio() instanceof RadioDriverInterface ? $this->getRadio()->getName() : '';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getRadio(): RadioDriverInterface
     {
         return $this->radio;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getValue()
-    {
-        return $this->getRadio() instanceof RadioDriverInterface ? $this->getRadio()->getValue() : null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function isChecked(): bool
-    {
-        return $this->getRadio() instanceof RadioDriverInterface ? $this->getRadio()->isChecked() : false;
     }
 
     /**
@@ -211,29 +190,6 @@ class RadioChoice implements RadioChoiceInterface
     public function render(): string
     {
         return $this->getRadio()->render() . $this->getLabel()->render();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setNameAttr(string $name): RadioChoiceInterface
-    {
-        if ($this->getRadio() instanceof RadioDriverInterface) {
-            $this->getRadio()->set('attrs.name', $name);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setChecked(): RadioChoiceInterface
-    {
-        if ($this->getRadio() instanceof RadioDriverInterface) {
-            $this->getRadio()->push('attrs', 'checked');
-        }
-        return $this;
     }
 
     /**

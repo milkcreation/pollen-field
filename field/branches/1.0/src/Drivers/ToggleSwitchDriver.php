@@ -23,11 +23,11 @@ class ToggleSwitchDriver extends FieldDriver implements ToggleSwitchDriverInterf
                 /**
                  * @var string $label_on
                  */
-                'label_on'  => _x('Oui', 'FieldToggleSwitch', 'tify'),
+                'label_on'  => 'Oui',
                 /**
                  * @var string $label_off
                  */
-                'label_off' => _x('Non', 'FieldToggleSwitch', 'tify'),
+                'label_off' => 'Non',
                 /**
                  * @var bool|int|string $value_on
                  */

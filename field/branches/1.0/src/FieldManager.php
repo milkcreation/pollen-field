@@ -105,7 +105,7 @@ class FieldManager implements FieldManagerInterface
      * Liste des pilotes déclarés.
      * @var FieldDriverInterface[][]|Closure[][]|string[][]|array
      */
-    protected $driverDefinitions = [];
+    public $driverDefinitions = [];
 
     /**
      * Route de traitement des requêtes XHR.

@@ -81,7 +81,7 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function getParent(): ?string
     {
-        return $this->get('parent', null);
+        return $this->get('parent');
     }
 
     /**

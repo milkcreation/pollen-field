@@ -90,9 +90,9 @@ interface FieldDriverInterface extends
     /**
      * Récupération de l'indice dans la requête HTTP de soumission.
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string;
+    public function getName(): ?string;
 
     /**
      * Récupération de la valeur dans la requête HTTP de soumission.

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\RadioCollection;
 
-use Illuminate\Support\Collection;
 use Pollen\Field\Drivers\RadioCollectionDriverInterface;
 use Pollen\Support\Concerns\BuildableTrait;
 
@@ -16,7 +15,7 @@ class RadioChoices implements RadioChoicesInterface
      * Instance du champ de collection de boutons radio associé.
      * @var RadioCollectionDriverInterface
      */
-    protected $radioCollection;
+    protected $collector;
 
     /**
      * Liste des éléments.
@@ -48,12 +47,10 @@ class RadioChoices implements RadioChoicesInterface
     public function build(): RadioChoicesInterface
     {
         if (!$this->isBuilt()) {
-            if ($this->exists()) {
+            if (!empty($this->choices)) {
                 foreach ($this->choices as $choice) {
-                    $choice->setChoices($this)->build()->setNameAttr($this->radioCollection->getName());
+                    $choice->setChoices($this)->build();
                 }
-
-                $this->registerChecked();
             }
 
             $this->setBuilt();
@@ -65,30 +62,9 @@ class RadioChoices implements RadioChoicesInterface
     /**
      * @inheritDoc
      */
-    public function exists(): bool
+    public function collector(): ?RadioCollectionDriverInterface
     {
-        return (bool)$this->choices;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function registerChecked(): RadioChoicesInterface
-    {
-        $checked = $this->radioCollection->getValue();
-        $collect = new Collection($this->choices);
-
-        if ($checked) {
-            $collect->each(
-                function (RadioChoice $choice) use ($checked) {
-                    if ($choice->getRadio()->get('checked') === $checked) {
-                        $choice->setChecked();
-                    }
-                }
-            );
-        }
-
-        return $this;
+        return $this->collector;
     }
 
     /**
@@ -96,15 +72,15 @@ class RadioChoices implements RadioChoicesInterface
      */
     public function render(): string
     {
-        return $this->radioCollection->view('choices', ['choices' => $this->choices]);
+        return $this->collector->view('choices', ['choices' => $this->choices]);
     }
 
     /**
      * @inheritDoc
      */
-    public function setRadioCollection(RadioCollectionDriverInterface $radioCollection): RadioChoicesInterface
+    public function setCollector(RadioCollectionDriverInterface $collector): RadioChoicesInterface
     {
-        $this->radioCollection = $radioCollection;
+        $this->collector = $collector;
 
         return $this;
     }

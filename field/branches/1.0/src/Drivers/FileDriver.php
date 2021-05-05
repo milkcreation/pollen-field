@@ -30,7 +30,7 @@ class FileDriver extends FieldDriver implements FileDriverInterface
      */
     public function parseAttrName(): FieldDriverInterface
     {
-        if ($name = $this->get('name')) {
+        if ($name = $this->pull('name')) {
             if ($this->get('multiple', false)) {
                 $name = "{$name}[]";
             }

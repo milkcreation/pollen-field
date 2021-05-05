@@ -135,7 +135,7 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
             ]
         );
 
-        $this->set('value', array_values(Arr::wrap($this->get('value', []))));
+        $this->set('value', array_values(Arr::wrap($this->getValue())));
 
         return parent::render();
     }

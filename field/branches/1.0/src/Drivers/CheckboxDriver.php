@@ -6,10 +6,14 @@ namespace Pollen\Field\Drivers;
 
 use Pollen\Field\FieldDriver;
 use Pollen\Field\FieldDriverInterface;
-use Pollen\Support\Arr;
 
 class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
 {
+    /**
+     * @var string
+     */
+    protected $checkedValue;
+
     /**
      * @inheritDoc
      */
@@ -19,7 +23,7 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
             parent::defaultParams(),
             [
                 /**
-                 * @var bool|string $checked Valeur de sélection de la case à cocher.
+                 * @var string $checked Valeur de sélection de la case à cocher.
                  */
                 'checked' => 'on',
             ]
@@ -31,11 +35,7 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
      */
     public function isChecked(): bool
     {
-        if ($this->getValue()) {
-            return in_array($this->get('checked'), $this->getValue(), true);
-        }
-
-        return false;
+        return $this->getValue() === $this->checkedValue;
     }
 
     /**
@@ -43,14 +43,12 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
      */
     public function parseAttrValue(): FieldDriverInterface
     {
-        if ($value = $this->get('value')) {
-            $this->set('value', Arr::wrap($value));
+        if ($value = $this->pull('value')) {
+            $this->setCheckedValue((string)$value);
         }
 
-        if ($this->get('checked') !== null) {
-            $this->set('attrs.value', (string)$this->get('checked'));
-
-            return $this;
+        if ($checked = $this->pull('checked')) {
+            $this->set('attrs.value', (string)$checked);
         }
 
         return $this;
@@ -68,6 +66,16 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
         }
 
         return parent::render();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setCheckedValue(string $checkedValue): CheckboxDriverInterface
+    {
+        $this->checkedValue = $checkedValue;
+
+        return $this;
     }
 
     /**

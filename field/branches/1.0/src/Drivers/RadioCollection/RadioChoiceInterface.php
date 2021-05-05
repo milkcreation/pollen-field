@@ -40,13 +40,6 @@ interface RadioChoiceInterface extends BuildableTraitInterface, ParamsBagDelegat
     public function getLabel(): LabelDriverInterface;
 
     /**
-     * Récupération du nom de soumission de la requête de traitement.
-     *
-     * @return string
-     */
-    public function getNameAttr(): string;
-
-    /**
      * Récupération de l'instance du champ radio.
      *
      * @return RadioDriverInterface
@@ -54,41 +47,11 @@ interface RadioChoiceInterface extends BuildableTraitInterface, ParamsBagDelegat
     public function getRadio(): RadioDriverInterface;
 
     /**
-     * Récupération de la valeur de soumission de la requête de traitement.
-     *
-     * @return mixed|null
-     */
-    public function getValue();
-
-    /**
-     * Vérification de l'indicateur de selection de l'élément.
-     *
-     * @return bool
-     */
-    public function isChecked(): bool;
-
-    /**
      * Récupération du rendu d'affichage de l'élément.
      *
      * @return string
      */
     public function render(): string;
-
-    /**
-     * Définition du nom de soumission de la requête de traitement.
-     *
-     * @param string $name
-     *
-     * @return static
-     */
-    public function setNameAttr(string $name): RadioChoiceInterface;
-
-    /**
-     * Définition de la selection de l'élément pour la requête de traitement.
-     *
-     * @return static
-     */
-    public function setChecked(): RadioChoiceInterface;
 
     /**
      * Définition de l'instance du gestionnaire de la liste de choix.
