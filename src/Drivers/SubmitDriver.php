@@ -19,7 +19,7 @@ class SubmitDriver extends FieldDriver implements SubmitDriverInterface
                 /**
                  * @var string $value
                  */
-                'value' => __('Envoyer', 'tify'),
+                'value' => 'Envoyer',
             ]
         );
     }

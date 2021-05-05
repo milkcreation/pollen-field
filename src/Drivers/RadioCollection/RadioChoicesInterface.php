@@ -25,18 +25,11 @@ interface RadioChoicesInterface extends BuildableTraitInterface
     public function build(): RadioChoicesInterface;
 
     /**
-     * Vérification d'existence d'éléments.
+     * Récupération de l'instance du champ de collection de bouton radio associés.
      *
-     * @return bool
+     * @return RadioCollectionDriverInterface|null
      */
-    public function exists(): bool;
-
-    /**
-     * Déclaration des éléments sélectionnés.
-     *
-     * @return static
-     */
-    public function registerChecked(): RadioChoicesInterface;
+    public function collector(): ?RadioCollectionDriverInterface;
 
     /**
      * Récupération du rendu d'affichage de l'élément.
@@ -46,19 +39,19 @@ interface RadioChoicesInterface extends BuildableTraitInterface
     public function render(): string;
 
     /**
-     * Définition de l'instance de champ radio collection associé.
+     * Définition de l'instance du champ de collection de bouton radio associés.
      *
-     * @param RadioCollectionDriverInterface $radioCollection
+     * @param RadioCollectionDriverInterface $collector
      *
      * @return static
      */
-    public function setRadioCollection(RadioCollectionDriverInterface $radioCollection): RadioChoicesInterface;
+    public function setCollector(RadioCollectionDriverInterface $collector): RadioChoicesInterface;
 
     /**
      * Définition d'un élément.
      *
      * @param string $key
-     * @param RadioChoiceInterface|RadioDriverInterface|array $choiceDef
+     * @param RadioChoiceInterface|RadioDriverInterface|array|string $choiceDef
      *
      * @return RadioChoiceInterface
      */

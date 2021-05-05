@@ -198,9 +198,9 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function getName(): string
+    public function getName(): ?string
     {
-        return $this->get('attrs.name') ?: $this->get('name');
+        return $this->get('attrs.name');
     }
 
     /**
@@ -208,7 +208,7 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function getValue()
     {
-        return $this->get('value');
+        return $this->get('attrs.value');
     }
 
     /**
@@ -263,7 +263,7 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function parseAttrName(): FieldDriverInterface
     {
-        if ($name = $this->get('name')) {
+        if ($name = $this->pull('name')) {
             $this->set('attrs.name', $name);
         }
         return $this;
@@ -274,8 +274,8 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function parseAttrValue(): FieldDriverInterface
     {
-        if ($value = $this->get('value')) {
-            $this->set('attrs.value', $value);
+        if ($value = $this->pull('value')) {
+            $this->set('attrs.value', (string)$value);
         }
         return $this;
     }

@@ -90,7 +90,7 @@ class SelectJsDriver extends FieldDriver implements SelectJsDriverInterface
      */
     public function getValue()
     {
-        $value = $this->get('value');
+        $value = $this->get('attrs.value');
 
         if ($value === null) {
             return null;

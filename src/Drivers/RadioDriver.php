@@ -6,10 +6,14 @@ namespace Pollen\Field\Drivers;
 
 use Pollen\Field\FieldDriver;
 use Pollen\Field\FieldDriverInterface;
-use Pollen\Support\Arr;
 
 class RadioDriver extends FieldDriver implements RadioDriverInterface
 {
+    /**
+     * @var string
+     */
+    protected $checkedValue;
+
     /**
      * @inheritDoc
      */
@@ -31,11 +35,7 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
      */
     public function isChecked(): bool
     {
-        if ($this->getValue()) {
-            return in_array($this->get('checked'), $this->getValue(), true);
-        }
-
-        return false;
+        return $this->getValue() === $this->checkedValue;
     }
 
     /**
@@ -43,14 +43,12 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
      */
     public function parseAttrValue(): FieldDriverInterface
     {
-        if ($value = $this->get('value')) {
-            $this->set('value', Arr::wrap($value));
+        if ($value = $this->pull('value')) {
+            $this->setCheckedValue((string)$value);
         }
 
-        if ($this->get('checked') !== null) {
-            $this->set('attrs.value', (string)$this->get('checked'));
-
-            return $this;
+        if ($checked = $this->pull('checked')) {
+            $this->set('attrs.value', (string)$checked);
         }
 
         return $this;
@@ -68,6 +66,16 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
         }
 
         return parent::render();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setCheckedValue(string $checkedValue): RadioDriverInterface
+    {
+        $this->checkedValue = $checkedValue;
+
+        return $this;
     }
 
     /**

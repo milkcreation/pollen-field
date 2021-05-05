@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\CheckboxCollection;
 
-use Illuminate\Support\Collection;
 use Pollen\Field\Drivers\CheckboxCollectionDriverInterface;
 use Pollen\Support\Concerns\BuildableTrait;
 
@@ -16,7 +15,7 @@ class CheckboxChoices implements CheckboxChoicesInterface
      * Instance du champ de collection de cases à cocher associé.
      * @var CheckboxCollectionDriverInterface
      */
-    protected $checkboxCollection;
+    protected $collector;
 
     /**
      * Liste des éléments.
@@ -48,12 +47,10 @@ class CheckboxChoices implements CheckboxChoicesInterface
     public function build(): CheckboxChoicesInterface
     {
         if (!$this->isBuilt()) {
-            if ($this->exists()) {
+            if (!empty($this->choices)) {
                 foreach ($this->choices as $choice) {
-                    $choice->setChoices($this)->build()->setNameAttr($this->checkboxCollection->getName());
+                    $choice->setChoices($this)->build();
                 }
-
-                $this->registerChecked();
             }
 
             $this->setBuilt();
@@ -65,30 +62,9 @@ class CheckboxChoices implements CheckboxChoicesInterface
     /**
      * @inheritDoc
      */
-    public function exists(): bool
+    public function collector(): ?CheckboxCollectionDriverInterface
     {
-        return (bool)$this->choices;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function registerChecked(): CheckboxChoicesInterface
-    {
-        $checked = $this->checkboxCollection->getValue();
-        $collect = new Collection($this->choices);
-
-        if ($checked) {
-            $collect->each(
-                function (CheckboxChoice $choice) use ($checked) {
-                    if (in_array($choice->getCheckbox()->get('checked'), $checked, true)) {
-                        $choice->setChecked();
-                    }
-                }
-            );
-        }
-
-        return $this;
+        return $this->collector;
     }
 
     /**
@@ -96,15 +72,15 @@ class CheckboxChoices implements CheckboxChoicesInterface
      */
     public function render(): string
     {
-        return $this->checkboxCollection->view('choices', ['choices' => $this->choices]);
+        return $this->collector->view('choices', ['choices' => $this->choices]);
     }
 
     /**
      * @inheritDoc
      */
-    public function setCheckboxCollection(CheckboxCollectionDriverInterface $checkboxCollection): CheckboxChoicesInterface
+    public function setCollector(CheckboxCollectionDriverInterface $collector): CheckboxChoicesInterface
     {
-        $this->checkboxCollection = $checkboxCollection;
+        $this->collector = $collector;
 
         return $this;
     }

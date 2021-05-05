@@ -41,7 +41,7 @@ class SelectDriver extends FieldDriver implements SelectDriverInterface
      */
     public function getValue()
     {
-        $value = $this->get('value');
+        $value = $this->get('attrs.value');
 
         if ($value === null) {
             return null;
@@ -65,7 +65,7 @@ class SelectDriver extends FieldDriver implements SelectDriverInterface
      */
     public function parseAttrName(): FieldDriverInterface
     {
-        if ($name = $this->get('name')) {
+        if ($name = $this->pull('name')) {
             $this->set('attrs.name', $this->get('multiple') ? "{$name}[]" : $name);
         }
         return $this;

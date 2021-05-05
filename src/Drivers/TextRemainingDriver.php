@@ -74,9 +74,9 @@ class TextRemainingDriver extends FieldDriver implements TextRemainingDriverInte
         );
 
         if ($this->get('tag') === 'textarea') {
-            $this->set('content', Str::br2nl($this->get('value') ?: ''));
+            $this->set('content', Str::br2nl($this->getValue() ?: ''));
         } else {
-            $this->set('attrs.value', $this->get('value') ?: '');
+            $this->set('attrs.value', $this->getValue() ?: '');
         }
 
         return parent::render();

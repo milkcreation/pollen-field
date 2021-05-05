@@ -94,6 +94,17 @@ class CheckboxChoice implements CheckboxChoiceInterface
         if (!$this->isBuilt()) {
             $this->parse();
 
+            if ($collector = $this->choices->collector()) {
+                $name = $collector->getName();
+                $this->checkbox->set('attrs.name', $name);
+
+                $values = $collector->getCheckedValues();
+                $value = $this->checkbox->getValue();
+                if (in_array($value, $values, true)) {
+                    $this->checkbox->setCheckedValue($value);
+                }
+            }
+
             $this->setBuilt();
         }
 
@@ -106,18 +117,10 @@ class CheckboxChoice implements CheckboxChoiceInterface
     public function defaults(): array
     {
         return [
-            'label'    => [
-                'before'  => '',
-                'after'   => '',
-                'content' => '',
-                'attrs'   => [],
-            ],
+            /** @see \Pollen\Field\Drivers\LabelDriverInterface */
+            'label'    => [],
+            /** @see \Pollen\Field\Drivers\CheckboxDriverInterface */
             'checkbox' => [
-                'before'  => '',
-                'after'   => '',
-                'attrs'   => [],
-                'name'    => '',
-                'value'   => '',
                 'checked' => $this->id,
             ],
         ];
@@ -145,30 +148,6 @@ class CheckboxChoice implements CheckboxChoiceInterface
     public function getLabel(): LabelDriverInterface
     {
         return $this->label;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getNameAttr(): string
-    {
-        return $this->getCheckbox() instanceof CheckboxDriverInterface ? $this->getCheckbox()->getName() : '';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getValue()
-    {
-        return $this->getCheckbox() instanceof CheckboxDriverInterface ? $this->getCheckbox()->getValue() : null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function isChecked(): bool
-    {
-        return $this->getCheckbox() instanceof CheckboxDriverInterface ? $this->getCheckbox()->isChecked() : false;
     }
 
     /**
@@ -210,30 +189,6 @@ class CheckboxChoice implements CheckboxChoiceInterface
     public function render(): string
     {
         return $this->getCheckbox()->render() . $this->getLabel()->render();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setNameAttr(string $name): CheckboxChoiceInterface
-    {
-        if ($this->getCheckbox() instanceof CheckboxDriverInterface) {
-            $this->getCheckbox()->set('attrs.name', $name);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setChecked(): CheckboxChoiceInterface
-    {
-        if ($this->getCheckbox() instanceof CheckboxDriverInterface) {
-            $this->getCheckbox()->push('attrs', 'checked');
-        }
-
-        return $this;
     }
 
     /**
