@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Pollen\Field;
 
-use Pollen\Container\BaseServiceProvider;
+use Pollen\Container\BootableServiceProvider;
 use Pollen\Field\Drivers\ButtonDriver;
 use Pollen\Field\Drivers\CheckboxDriver;
 use Pollen\Field\Drivers\CheckboxCollectionDriver;
@@ -34,7 +34,7 @@ use Pollen\Field\Drivers\TextRemainingDriver;
 use Pollen\Field\Drivers\TinymceDriver;
 use Pollen\Field\Drivers\ToggleSwitchDriver;
 
-class FieldServiceProvider extends BaseServiceProvider
+class FieldServiceProvider extends BootableServiceProvider
 {
     /**
      * @var string[]
