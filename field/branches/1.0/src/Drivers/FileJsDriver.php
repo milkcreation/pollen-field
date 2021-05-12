@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers;
 
+use League\Flysystem\FilesystemException;
 use Pollen\Http\JsonResponse;
 use Pollen\Http\ResponseInterface;
+use Pollen\Support\Proxy\StorageProxy;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Pollen\Field\FieldDriver;
-use tiFy\Filesystem\StorageManager;
 
 class FileJsDriver extends FieldDriver implements FileJsDriverInterface
 {
+    use StorageProxy;
+
     /**
      * @inheritDoc
      */
@@ -103,11 +106,15 @@ class FileJsDriver extends FieldDriver implements FileJsDriverInterface
      */
     public function xhrResponse(...$args): ResponseInterface
     {
-        $filesystem = (new StorageManager())->local($this->httpRequest()->input('_dir'));
+        $disk = $this->storage()->createLocalFilesystem($this->httpRequest()->input('_dir'));
 
-        foreach ($this->httpRequest()->files as $key => $f) {
+        foreach ($this->httpRequest()->files as $f) {
             /** @var UploadedFile $f */
-            $filesystem->put($f->getClientOriginalName(), file_get_contents($f->getPathname()));
+            try {
+                $disk->write($f->getClientOriginalName(), file_get_contents($f->getPathname()));
+            } catch (FilesystemException $e) {
+                unset($e);
+            }
         }
 
         return new JsonResponse([
