@@ -1,0 +1,53 @@
+// Variables
+@import "./variables";
+
+$checkbox-global-color: fieldColor(regular) !default;
+$checkbox-label-color: $checkbox-global-color;
+$checkbox-box-background-color: fieldColor(transparent);
+$checkbox-box-checked-color: $checkbox-global-color;
+$checkbox-box-border-color: $checkbox-global-color;
+
+// Personnalisation
+.FieldCheckbox {
+  display: none;
+
+  + .FieldLabel {
+    position: relative;
+    color: $checkbox-label-color;
+
+    &::before {
+      display: inline-block;
+      content: " ";
+      height: 12px;
+      width: 12px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    &::after {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      display: block;
+      content: " ";
+      height: 8px;
+      width: 8px;
+      transform: scale(0);
+      transition: transform 200ms ease-in-out;
+    }
+  }
+
+  &:checked + .FieldLabel::after {
+    transform: scale(1);
+    transition: transform 200ms ease-in-out;
+  }
+}
+
+.FieldCheckbox + .FieldLabel::after {
+  background-color: $checkbox-box-checked-color;
+}
+
+.FieldCheckbox + .FieldLabel::before {
+  border: 1px solid $checkbox-box-border-color;
+  background-color: $checkbox-box-background-color;
+}
