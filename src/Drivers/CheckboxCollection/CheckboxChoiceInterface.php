@@ -4,61 +4,118 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\CheckboxCollection;
 
-use Pollen\Field\Drivers\CheckboxDriverInterface;
-use Pollen\Field\Drivers\LabelDriverInterface;
-use Pollen\Support\Concerns\BuildableTraitInterface;
-use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
-
-interface CheckboxChoiceInterface extends BuildableTraitInterface, ParamsBagDelegateTraitInterface
+interface CheckboxChoiceInterface
 {
     /**
-     * Résolution de sortie de la classe sous la forme d'une chaîne de caractères.
+     * Ajout d'une instance enfant.
      *
-     * @return string
-     */
-    public function __toString(): string;
-
-    /**
-     * Initialisation.
+     * @param CheckboxChoiceInterface $checkboxChoice
      *
      * @return static
      */
-    public function build(): CheckboxChoiceInterface;
+    public function addChildren(CheckboxChoiceInterface $checkboxChoice): CheckboxChoiceInterface;
 
     /**
-     * Récupération de l'instance de la checkbox.
+     * Activation de l'élément.
      *
-     * @return CheckboxDriverInterface
+     * @param bool $enabled
+     *
+     * @return static
      */
-    public function getCheckbox(): CheckboxDriverInterface;
+    public function enabled(bool $enabled = true): CheckboxChoiceInterface;
 
     /**
-     * Récupération du l'identifiant de qualification de l'élément.
+     * Récupération de la liste des instances enfants associées.
+     *
+     * @return CheckboxChoiceInterface[]|array
+     */
+    public function getChildren(): array;
+
+    /**
+     * Récupération du niveau de profondeur.
+     *
+     * @return int
+     */
+    public function getDepth(): int;
+
+    /**
+     * Récupération du groupe associé.
+     *
+     * @return CheckboxChoiceInterface|null
+     */
+    public function getGroup(): ?CheckboxChoiceInterface;
+
+    /**
+     * Récupération de l'intitulé de qualification.
      *
      * @return string
      */
-    public function getId(): string;
+    public function getLabel(): string;
 
     /**
-     * Récupération de l'instance du champ label.
-     *
-     * @return LabelDriverInterface
+     * Nom de qualification.
      */
-    public function getLabel(): LabelDriverInterface;
+    public function getName(): ?string;
 
     /**
-     * Récupération du rendu d'affichage de l'élément.
+     * Récupération de la valeur.
+     *
+     * @return string
+     */
+    public function getValue(): string;
+
+    /**
+     * Vérification d'appartenance à un groupe.
+     *
+     * @return bool
+     */
+    public function inGroup(): bool;
+
+    /**
+     * Vérifie si l'élément est actif.
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool;
+
+    /**
+     * Vérifie s'il s'agit d'un groupe.
+     *
+     * @return bool
+     */
+    public function isGroup(): bool;
+
+    /**
+     * Rendu d'affichage de l'élément.
      *
      * @return string
      */
     public function render(): string;
 
     /**
-     * Définition de l'instance du gestionnaire de la liste de choix.
+     * Définition du niveau de profondeur.
      *
-     * @param CheckboxChoicesInterface $choices
+     * @param int $depth
      *
      * @return static
      */
-    public function setChoices(CheckboxChoicesInterface $choices): CheckboxChoiceInterface;
+    public function setDepth(int $depth = 0): CheckboxChoiceInterface;
+
+    /**
+     * Définition du nom de qualification.
+     *
+     * @param string|null $name
+     *
+     * @return static
+     */
+    public function setName(?string $name): CheckboxChoiceInterface;
+
+    /**
+     * Définition du groupe associé.
+     *
+     * @param CheckboxChoiceInterface $group
+     *
+     * @return static
+     */
+    public function setGroup(CheckboxChoiceInterface $group): CheckboxChoiceInterface;
 }

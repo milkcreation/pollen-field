@@ -23,7 +23,13 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
             parent::defaultParams(),
             [
                 /**
-                 * @var string $checked Valeur de sélection de la case à cocher.
+                 * Intitulé de qualification
+                 * @var string|null
+                 */
+                'label' => null,
+                /**
+                 * Valeur de sélection de la case à cocher.
+                 * @var string
                  */
                 'checked' => 'on',
             ]
@@ -63,6 +69,21 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
 
         if ($this->isChecked()) {
             $this->push('attrs', 'checked');
+        }
+
+        if ($label = $this->get('label')) {
+            $params = [
+                'attrs'   => [],
+                'content' => $label
+            ];
+
+            if (!($id = $this->get('attrs.id'))) {
+                $id = 'FieldCheckbox-' . $this->getIndex();
+                $this->set('attrs.id', $id);
+            }
+            $params['attrs']['for'] = $id;
+
+            $this->set('label', $this->field('label', $params));
         }
 
         return parent::render();

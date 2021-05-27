@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Pollen\Field\Drivers;
 
 use Pollen\Field\Drivers\Select\SelectChoiceInterface;
-use Pollen\Field\Drivers\Select\SelectChoices;
-use Pollen\Field\Drivers\Select\SelectChoicesInterface;
+use Pollen\Field\Drivers\Select\SelectChoiceCollection;
+use Pollen\Field\Drivers\Select\SelectChoiceCollectionInterface;
 use Pollen\Field\FieldDriver;
 use Pollen\Field\FieldDriverInterface;
 
@@ -21,17 +21,19 @@ class SelectDriver extends FieldDriver implements SelectDriverInterface
             parent::defaultParams(),
             [
                 /**
-                 * @var string[]|array|SelectChoiceInterface[]|SelectChoicesInterface $choices Liste de selection d'éléments.
+                 * @var string[]|array|SelectChoiceInterface[]|SelectChoiceCollectionInterface $choices.
                  */
                 'choices'  => [],
                 /**
-                 * @var bool $multiple Activation de la liste de selection multiple.
+                 * Activation de la liste de selection multiple.
+                 * @var bool $multiple
                  */
                 'multiple' => false,
                 /**
-                 *
+                 * Activation de l'encapsulation
+                 * @var bool
                  */
-                'wrapper'  => false,
+                'wrapper' => false
             ]
         );
     }
@@ -66,7 +68,7 @@ class SelectDriver extends FieldDriver implements SelectDriverInterface
     public function parseAttrName(): FieldDriverInterface
     {
         if ($name = $this->pull('name')) {
-            $this->set('attrs.name', $this->get('multiple') ? "{$name}[]" : $name);
+            $this->set('attrs.name', $this->get('multiple') ? $name . '[]' : $name);
         }
         return $this;
     }
@@ -77,13 +79,15 @@ class SelectDriver extends FieldDriver implements SelectDriverInterface
     public function render(): string
     {
         $choices = $this->get('choices', []);
-        if (!$choices instanceof SelectChoicesInterface) {
-            $this->set('choices', new SelectChoices($choices, $this->getValue()));
+        if (!$choices instanceof SelectChoiceCollectionInterface) {
+            $this->set('choices', $choices = new SelectChoiceCollection($choices));
         }
+        $choices->setSelected($this->getValue())->walk();
 
         if ($this->get('multiple')) {
             $this->push('attrs', 'multiple');
         }
+
         return parent::render();
     }
 

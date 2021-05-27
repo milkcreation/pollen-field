@@ -9,4 +9,5 @@
     'attrs' => $this->get('attrs', []),
 ]);
 ?>
+<?php echo $this->get('label'); ?>
 <?php $this->after();

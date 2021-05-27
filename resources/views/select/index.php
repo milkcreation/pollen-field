@@ -9,6 +9,8 @@
 
 <?php $this->before(); ?>
     <select <?php $this->attrs(); ?>>
-        <?php echo $this->get('choices', ''); ?>
+        <?php foreach ($this->get('choices', []) as $choice) : ?>
+            <?php $this->insert('choice', compact('choice')); ?>
+        <?php endforeach; ?>
     </select>
 <?php $this->after(); ?>

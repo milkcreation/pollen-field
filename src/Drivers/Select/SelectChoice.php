@@ -4,68 +4,105 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\Select;
 
-use Pollen\Support\Html;
-use Pollen\Support\ParamsBag;
-
-class SelectChoice extends ParamsBag implements SelectChoiceInterface
+class SelectChoice implements SelectChoiceInterface
 {
     /**
-     * Nom de qualification.
-     * @var int|string
+     * @var string
      */
-    protected $name = '';
+    protected $value = '';
 
     /**
-     * Niveau de profondeur d'affichage dans le selecteur.
+     * @var string
+     */
+    protected $label = '';
+
+    /**
+     * @var bool
+     */
+    protected $isGroup = false;
+
+    /**
      * @var int
      */
-    private $depth = 0;
+    protected $depth = 0;
 
     /**
-     * CONSTRUCTEUR.
-     *
-     * @param string $name Nom de qualification de l'élément.
-     * @param array|string $attrs Liste des attributs de configuration|Intitulé de qualification de l'option.
-     *
-     * @return void
+     * @var SelectChoiceInterface|null
      */
-    public function __construct(string $name, $attrs = [])
-    {
-        $this->name = $name;
-        $this->set($attrs);
+    protected $group;
 
-        parent::__construct();
+    /**
+     * @var SelectChoiceInterface[]|array
+     */
+    protected $children = [];
+
+    /**
+     * @var string
+     */
+    protected $enabled = false;
+
+    /**
+     * @param string $value
+     * @param string|null $label
+     * @param bool $isGroup
+     */
+    public function __construct(string $value, ?string $label = null, bool $isGroup = false)
+    {
+        $this->value = $value;
+        $this->label = $label ?? $this->value;
+        $this->isGroup = $isGroup;
     }
 
     /**
      * @inheritdoc
      */
-    public function defaults(): array
+    public function addChildren(SelectChoiceInterface $selectChoice): SelectChoiceInterface
     {
-        return [
-            'name'    => $this->name,
-            'group'   => false,
-            'attrs'   => [],
-            'parent'  => null,
-            'value'   => $this->name,
-            'content' => '',
-        ];
+        $this->children[] = $selectChoice;
+
+        return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function getContent(): string
+    public function enabled(bool $enabled = true): SelectChoiceInterface
     {
-        return (string)$this->get('content');
+        $this->enabled = $enabled;
+
+        return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function getName(): string
+    public function getChildren(): array
     {
-        return (string)$this->get('name');
+        return $this->children;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDepth(): int
+    {
+        return $this->depth;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGroup(): ?SelectChoiceInterface
+    {
+        return $this->group;
     }
 
     /**
@@ -73,31 +110,15 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function getValue(): string
     {
-        return (string)$this->get('value');
+        return $this->value;
     }
 
     /**
      * @inheritdoc
      */
-    public function getParent(): ?string
+    public function inGroup(): bool
     {
-        return $this->get('parent');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function hasParent(): bool
-    {
-        return $this->get('parent') !== null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isDisabled(): bool
-    {
-        return in_array('disabled', $this->get('attrs', []), true);
+        return $this->group !== null;
     }
 
     /**
@@ -105,15 +126,15 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function isGroup(): bool
     {
-        return $this->get('group');
+        return $this->isGroup;
     }
 
     /**
      * @inheritdoc
      */
-    public function isSelected(): bool
+    public function isEnabled(): bool
     {
-        return !$this->isGroup() && in_array('selected', $this->get('attrs', []), true);
+        return $this->enabled;
     }
 
     /**
@@ -129,32 +150,11 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
     /**
      * @inheritdoc
      */
-    public function setSelected(array $selected): SelectChoiceInterface
+    public function setGroup(SelectChoiceInterface $group): SelectChoiceInterface
     {
-        if ($selected !== null) {
-            if (!$this->isGroup() && in_array($this->getValue(), $selected, true)) {
-                $this->push('attrs', 'selected');
-            }
-        }
+        $this->group = $group;
+
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function parse(): void
-    {
-        parent::parse();
-
-        if ($this->isGroup()) {
-            $this->pull('value');
-            $this->set(
-                'attrs.label',
-                str_repeat("&nbsp;&nbsp;&nbsp;", $this->depth) . htmlentities($this->pull('content'))
-            );
-        } else {
-            $this->set('attrs.value', $this->getValue());
-        }
     }
 
     /**
@@ -168,9 +168,9 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
     /**
      * @inheritdoc
      */
-    public function tagContent(): string
+    public function tagBody(): string
     {
-        return $this->getContent() ? : '';
+        return $this->isGroup() ? '' : $this->getLabel();
     }
 
     /**
@@ -178,8 +178,20 @@ class SelectChoice extends ParamsBag implements SelectChoiceInterface
      */
     public function tagOpen(): string
     {
-        $attrs = Html::attr($this->get('attrs', []));
+        $attrs = '';
+        if ($this->isGroup()) {
+            $attrs .= "label=\"" . $this->getLabel() . "\"";
+        } else {
+            $attrs .= "value=\"" . $this->getValue() . "\"";
+            if ($this->isEnabled()) {
+                $attrs .= " selected";
+            }
+        }
 
-        return "\n" . str_repeat("\t", $this->depth) . ($this->isGroup() ? "<optgroup {$attrs}>" : "<option {$attrs}>");
+        return "\n" .
+            str_repeat("\t", $this->getDepth()) .
+            ($this->isGroup()
+                ? "<optgroup $attrs>" : "<option $attrs>"
+            );
     }
 }
