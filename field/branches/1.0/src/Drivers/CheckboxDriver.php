@@ -49,11 +49,13 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
      */
     public function parseAttrValue(): FieldDriverInterface
     {
-        if ($value = $this->pull('value')) {
+        $value = $this->pull('value');
+        if ($value !== null) {
             $this->setCheckedValue((string)$value);
         }
 
-        if ($checked = $this->pull('checked')) {
+        $checked = $this->pull('checked');
+        if ($checked !== null) {
             $this->set('attrs.value', (string)$checked);
         }
 

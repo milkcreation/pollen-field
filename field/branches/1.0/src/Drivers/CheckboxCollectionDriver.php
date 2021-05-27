@@ -58,9 +58,8 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
      */
     public function parseAttrValue(): FieldDriverInterface
     {
-        if ($value = $this->pull('value')) {
-            $this->checkedValues = Arr::wrap($value);
-        }
+        $value = $this->pull('value');
+        $this->checkedValues = $value !== null ? Arr::wrap($value) : null;
 
         return $this;
     }
