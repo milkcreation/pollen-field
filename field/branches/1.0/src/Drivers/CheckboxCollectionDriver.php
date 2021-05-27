@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Pollen\Field\Drivers;
 
 use Pollen\Field\Drivers\CheckboxCollection\CheckboxChoiceInterface;
-use Pollen\Field\Drivers\CheckboxCollection\CheckboxChoices;
-use Pollen\Field\Drivers\CheckboxCollection\CheckboxChoicesInterface;
+use Pollen\Field\Drivers\CheckboxCollection\CheckboxChoiceCollection;
+use Pollen\Field\Drivers\CheckboxCollection\CheckboxChoiceCollectionInterface;
 use Pollen\Field\FieldDriver;
 use Pollen\Field\FieldDriverInterface;
 use Pollen\Support\Arr;
@@ -27,7 +27,7 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
             parent::defaultParams(),
             [
                 /**
-                 * @var array|CheckboxDriverInterface[]|CheckboxChoiceInterface[]|CheckboxChoicesInterface $choices
+                 * @var array|CheckboxDriverInterface[]|CheckboxChoiceInterface[]|CheckboxChoiceCollectionInterface $choices
                  */
                 'choices' => [],
             ]
@@ -72,11 +72,10 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
     public function render(): string
     {
         $choices = $this->get('choices', []);
-        if (!$choices instanceof CheckboxChoicesInterface) {
-            $choices = new CheckboxChoices($choices);
+        if (!$choices instanceof CheckboxChoiceCollectionInterface) {
+            $this->set('choices', $choices = new CheckboxChoiceCollection($choices));
         }
-
-        $this->set('choices', $choices->setCollector($this)->build());
+        $choices->setName($this->getName())->setChecked($this->getCheckedValues())->walk();
 
         return parent::render();
     }

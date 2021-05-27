@@ -5,198 +5,214 @@ declare(strict_types=1);
 namespace Pollen\Field\Drivers\CheckboxCollection;
 
 use Pollen\Field\Drivers\CheckboxDriverInterface;
-use Pollen\Field\Drivers\LabelDriverInterface;
-use Pollen\Support\Concerns\BuildableTrait;
-use Pollen\Support\Concerns\ParamsBagDelegateTrait;
 use Pollen\Support\Proxy\FieldProxy;
+use Throwable;
 
 class CheckboxChoice implements CheckboxChoiceInterface
 {
-    use BuildableTrait;
     use FieldProxy;
-    use ParamsBagDelegateTrait;
 
     /**
-     * Compteur d'indice.
-     * @var int
+     * @var string|null
      */
-    private static $_index = 0;
+    protected $name;
 
     /**
-     * Instance de la case à cocher.
-     * @var CheckboxDriverInterface
-     */
-    protected $checkbox;
-
-    /**
-     * Identifiant de qualification.
      * @var string
      */
-    protected $id = '';
+    protected $value = '';
 
     /**
-     * Indice de qualification.
+     * @var string
+     */
+    protected $label = '';
+
+    /**
+     * @var bool
+     */
+    protected $isGroup = false;
+
+    /**
      * @var int
      */
-    protected $index = 0;
+    protected $depth = 0;
 
     /**
-     * Instance de l'intitulé.
-     * @var LabelDriverInterface
+     * @var CheckboxChoiceInterface|null
      */
-    protected $label;
+    protected $group;
 
     /**
-     * Instance du gestionnaire d'affichage de la liste des éléments.
-     * @var CheckboxChoicesInterface
+     * @var CheckboxChoiceInterface[]|array
      */
-    protected $choices;
+    protected $children = [];
 
     /**
-     * @param string $id Identifiant de qualification.
-     * @param array|string|CheckboxDriverInterface $checkboxDef
-     *
-     * @return void
+     * @var string
      */
-    public function __construct(string $id, $checkboxDef)
+    protected $enabled = false;
+
+    /**
+     * @param string $value
+     * @param string|null $label
+     * @param bool $isGroup
+     */
+    public function __construct(string $value, ?string $label = null, bool $isGroup = false)
     {
-        $this->id = $id;
-        $this->index = self::$_index++;
-
-        if (is_string($checkboxDef)) {
-            $checkboxDef = [
-                'label' => [
-                    'content' => $checkboxDef,
-                ],
-            ];
-        }
-
-        if ($checkboxDef instanceof CheckboxDriverInterface) {
-            $this->checkbox = $checkboxDef;
-        } else {
-            $this->set(array_merge($this->defaults(), $checkboxDef));
-        }
+        $this->value = $value;
+        $this->label = $label ?? $this->value;
+        $this->isGroup = $isGroup;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function __toString(): string
+    public function addChildren(CheckboxChoiceInterface $checkboxChoice): CheckboxChoiceInterface
     {
-        return $this->render();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function build(): CheckboxChoiceInterface
-    {
-        if (!$this->isBuilt()) {
-            $this->parse();
-
-            if ($collector = $this->choices->collector()) {
-                $name = $collector->getName();
-                $this->checkbox->set('attrs.name', $name);
-
-                $values = $collector->getCheckedValues();
-                $value = $this->checkbox->getValue();
-                if (in_array($value, $values, true)) {
-                    $this->checkbox->setCheckedValue($value);
-                }
-            }
-
-            $this->setBuilt();
-        }
+        $this->children[] = $checkboxChoice;
 
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function defaults(): array
+    public function enabled(bool $enabled = true): CheckboxChoiceInterface
     {
-        return [
-            /** @see \Pollen\Field\Drivers\LabelDriverInterface */
-            'label'    => [],
-            /** @see \Pollen\Field\Drivers\CheckboxDriverInterface */
-            'checkbox' => [
-                'checked' => $this->id,
-            ],
-        ];
+        $this->enabled = $enabled;
+
+        return $this;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getCheckbox(): CheckboxDriverInterface
+    public function getChildren(): array
     {
-        return $this->checkbox;
+        return $this->children;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getId(): string
+    public function getDepth(): int
     {
-        return $this->id;
+        return $this->depth;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getLabel(): LabelDriverInterface
+    public function getLabel(): string
     {
         return $this->label;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function parse(): void
+    public function getName(): ?string
     {
-        if (!$this->get('attrs.id')) {
-            $this->set('attrs.id', 'FieldCheckboxCollection-item--' . $this->index);
-        }
-
-        if (!$this->get('checkbox.attrs.id')) {
-            $this->set('checkbox.attrs.id', 'FieldCheckboxCollection-itemInput--' . $this->index);
-        }
-
-        if (!$this->get('checkbox.attrs.class')) {
-            $this->set('checkbox.attrs.class', 'FieldCheckboxCollection-itemInput');
-        }
-
-        if (!$this->get('label.attrs.id')) {
-            $this->set('label.attrs.id', 'FieldCheckboxCollection-itemLabel--' . $this->index);
-        }
-
-        if (!$this->get('label.attrs.class')) {
-            $this->set('label.attrs.class', 'FieldCheckboxCollection-itemLabel');
-        }
-
-        if (!$this->get('label.attrs.for')) {
-            $this->set('label.attrs.for', 'FieldCheckboxCollection-itemInput--' . $this->index);
-        }
-
-        $this->checkbox = $this->field()->get('checkbox', $this->get('checkbox', []));
-        $this->label = $this->field()->get('label', $this->get('label', []));
+        return $this->name;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
+     */
+    public function getGroup(): ?CheckboxChoiceInterface
+    {
+        return $this->group;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function inGroup(): bool
+    {
+        return $this->group !== null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isGroup(): bool
+    {
+        return $this->isGroup;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function render(): string
     {
-        return $this->getCheckbox()->render() . $this->getLabel()->render();
+        if ($this->isGroup()) {
+            return $this->getLabel();
+        }
+
+        try {
+            /** @var CheckboxDriverInterface $field */
+            $field = $this->field(
+                'checkbox',
+                [
+                    'name'    => $this->getName(),
+                    'value'   => $this->isEnabled() ? $this->getValue() : null,
+                    'label'   => $this->getLabel(),
+                    'checked' => $this->getValue(),
+                ]
+            );
+
+            if ($field instanceof CheckboxDriverInterface) {
+                return $field->render();
+            }
+
+            return '';
+        } catch (Throwable $e) {
+            return '';
+        }
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setChoices(CheckboxChoicesInterface $choices): CheckboxChoiceInterface
+    public function setDepth(int $depth = 0): CheckboxChoiceInterface
     {
-        $this->choices = $choices;
+        $this->depth = $depth;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGroup(CheckboxChoiceInterface $group): CheckboxChoiceInterface
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName(?string $name): CheckboxChoiceInterface
+    {
+        $this->name = $name;
 
         return $this;
     }

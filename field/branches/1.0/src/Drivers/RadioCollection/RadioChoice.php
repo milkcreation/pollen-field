@@ -4,200 +4,215 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\RadioCollection;
 
-use Pollen\Field\Drivers\LabelDriverInterface;
 use Pollen\Field\Drivers\RadioDriverInterface;
-use Pollen\Support\Concerns\BuildableTrait;
-use Pollen\Support\Concerns\ParamsBagDelegateTrait;
 use Pollen\Support\Proxy\FieldProxy;
+use Throwable;
 
 class RadioChoice implements RadioChoiceInterface
 {
-    use BuildableTrait;
     use FieldProxy;
-    use ParamsBagDelegateTrait;
 
     /**
-     * Compteur d'indice.
+     * @var RadioChoiceInterface[]|array
+     */
+    protected $children = [];
+
+    /**
      * @var int
      */
-    private static $_index = 0;
+    protected $depth = 0;
 
     /**
-     * Nom de qualification.
-     * @var string|int
+     * @var string
      */
-    protected $id = '';
+    protected $enabled = false;
 
     /**
-     * Indice de qualification.
-     * @var int
+     * @var RadioChoiceInterface|null
      */
-    protected $index = 0;
+    protected $group;
 
     /**
-     * Instance de l'intitulé.
-     * @var LabelDriverInterface
+     * @var bool
      */
-    protected $label;
+    protected $isGroup = false;
 
     /**
-     * Instance du bouton radio.
-     * @var RadioDriverInterface
+     * @var string|null
      */
-    protected $radio;
+    protected $name;
 
     /**
-     * Instance du gestionnaire d'affichage de la liste des éléments.
-     * @var RadioChoicesInterface
+     * @var string
      */
-    protected $choices;
+    protected $label = '';
 
     /**
-     * @param string $id Identifiant de qualification.
-     * @param array|string|RadioDriverInterface $radioDef
-     *
-     * @return void
+     * @var string
      */
-    public function __construct(string $id, $radioDef)
+    protected $value = '';
+
+    /**
+     * @param string $value
+     * @param string|null $label
+     * @param bool $isGroup
+     */
+    public function __construct(string $value, ?string $label = null, bool $isGroup = false)
     {
-        $this->id = $id;
-        $this->index = self::$_index++;
-
-        if (is_string($radioDef)) {
-            $radioDef = [
-                'label' => [
-                    'content' => $radioDef,
-                ],
-            ];
-        }
-
-        if ($radioDef instanceof RadioDriverInterface) {
-            $this->radio = $radioDef;
-        } else {
-            $this->set(array_merge($this->defaults(), $radioDef));
-        }
+        $this->value = $value;
+        $this->label = $label ?? $this->value;
+        $this->isGroup = $isGroup;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function __toString(): string
+    public function addChildren(RadioChoiceInterface $radioChoice): RadioChoiceInterface
     {
-        return $this->render();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function build(): RadioChoiceInterface
-    {
-        if (!$this->isBuilt()) {
-            $this->parse();
-
-            if ($collector = $this->choices->collector()) {
-                $name = $collector->getName();
-                $this->radio->set('attrs.name', $name);
-
-                $values = $collector->getCheckedValues();
-                $value = $this->radio->getValue();
-                if (in_array($value, $values, true)) {
-                    $this->radio->setCheckedValue($value);
-                }
-            }
-
-            $this->setBuilt();
-        }
+        $this->children[] = $radioChoice;
 
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function defaults(): array
+    public function enabled(bool $enabled = true): RadioChoiceInterface
     {
-        return [
-            /** @see \Pollen\Field\Drivers\LabelDriverInterface */
-            'label' => [],
-            /** @see \Pollen\Field\Drivers\RadioDriverInterface */
-            'radio' => [
-                'checked' => $this->id,
-            ],
+        $this->enabled = $enabled;
 
-        ];
+        return $this;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getId(): string
+    public function getChildren(): array
     {
-        return $this->id;
+        return $this->children;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getLabel(): LabelDriverInterface
+    public function getDepth(): int
+    {
+        return $this->depth;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLabel(): string
     {
         return $this->label;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function getRadio(): RadioDriverInterface
+    public function getName(): ?string
     {
-        return $this->radio;
+        return $this->name;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function parse(): void
+    public function getGroup(): ?RadioChoiceInterface
     {
-        if (!$this->get('attrs.id')) {
-            $this->set('attrs.id', 'FieldRadioCollection-item--' . $this->index);
-        }
-
-        if (!$this->get('radio.attrs.id')) {
-            $this->set('radio.attrs.id', 'FieldRadioCollection-itemInput--' . $this->index);
-        }
-
-        if (!$this->get('radio.attrs.class')) {
-            $this->set('radio.attrs.class', 'FieldRadioCollection-itemInput');
-        }
-
-        if (!$this->get('label.attrs.id')) {
-            $this->set('label.attrs.id', 'FieldRadioCollection-itemLabel--' . $this->index);
-        }
-
-        if (!$this->get('label.attrs.class')) {
-            $this->set('label.attrs.class', 'FieldRadioCollection-itemLabel');
-        }
-
-        if (!$this->get('label.attrs.for')) {
-            $this->set('label.attrs.for', 'FieldRadioCollection-itemInput--' . $this->index);
-        }
-
-        $this->radio = $this->field()->get('radio', $this->get('radio', []));
-        $this->label = $this->field()->get('label', $this->get('label', []));
+        return $this->group;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function inGroup(): bool
+    {
+        return $this->group !== null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isGroup(): bool
+    {
+        return $this->isGroup;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function render(): string
     {
-        return $this->getRadio()->render() . $this->getLabel()->render();
+        if ($this->isGroup()) {
+            return $this->getLabel();
+        }
+
+        try {
+            /** @var RadioDriverInterface $field */
+            $field = $this->field(
+                'radio',
+                [
+                    'name'    => $this->getName(),
+                    'value'   => $this->isEnabled() ? $this->getValue() : null,
+                    'label'   => $this->getLabel(),
+                    'checked' => $this->getValue(),
+                ]
+            );
+
+            if ($field instanceof RadioDriverInterface) {
+                return $field->render();
+            }
+
+            return '';
+        } catch (Throwable $e) {
+            return '';
+        }
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function setChoices(RadioChoicesInterface $choices): RadioChoiceInterface
+    public function setDepth(int $depth = 0): RadioChoiceInterface
     {
-        $this->choices = $choices;
+        $this->depth = $depth;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGroup(RadioChoiceInterface $group): RadioChoiceInterface
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName(?string $name): RadioChoiceInterface
+    {
+        $this->name = $name;
 
         return $this;
     }

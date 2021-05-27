@@ -4,61 +4,118 @@ declare(strict_types=1);
 
 namespace Pollen\Field\Drivers\RadioCollection;
 
-use Pollen\Field\Drivers\LabelDriverInterface;
-use Pollen\Field\Drivers\RadioDriverInterface;
-use Pollen\Support\Concerns\BuildableTraitInterface;
-use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
-
-interface RadioChoiceInterface extends BuildableTraitInterface, ParamsBagDelegateTraitInterface
+interface RadioChoiceInterface
 {
     /**
-     * Résolution de sortie de la classe sous la forme d'une chaîne de caractères.
+     * Ajout d'une instance enfant.
      *
-     * @return string
-     */
-    public function __toString(): string;
-
-    /**
-     * Initialisation.
+     * @param RadioChoiceInterface $radioChoice
      *
      * @return static
      */
-    public function build(): RadioChoiceInterface;
+    public function addChildren(RadioChoiceInterface $radioChoice): RadioChoiceInterface;
 
     /**
-     * Récupération du l'identifiant de qualification de l'élément.
+     * Activation de l'élément.
+     *
+     * @param bool $enabled
+     *
+     * @return static
+     */
+    public function enabled(bool $enabled = true): RadioChoiceInterface;
+
+    /**
+     * Récupération de la liste des instances enfants associées.
+     *
+     * @return RadioChoiceInterface[]|array
+     */
+    public function getChildren(): array;
+
+    /**
+     * Récupération du niveau de profondeur.
+     *
+     * @return int
+     */
+    public function getDepth(): int;
+
+    /**
+     * Récupération du groupe associé.
+     *
+     * @return RadioChoiceInterface|null
+     */
+    public function getGroup(): ?RadioChoiceInterface;
+
+    /**
+     * Récupération de l'intitulé de qualification.
      *
      * @return string
      */
-    public function getId(): string;
+    public function getLabel(): string;
 
     /**
-     * Récupération de l'instance du champ label.
-     *
-     * @return LabelDriverInterface
+     * Nom de qualification.
      */
-    public function getLabel(): LabelDriverInterface;
+    public function getName(): ?string;
 
     /**
-     * Récupération de l'instance du champ radio.
+     * Récupération de la valeur.
      *
-     * @return RadioDriverInterface
+     * @return string
      */
-    public function getRadio(): RadioDriverInterface;
+    public function getValue(): string;
 
     /**
-     * Récupération du rendu d'affichage de l'élément.
+     * Vérification d'appartenance à un groupe.
+     *
+     * @return bool
+     */
+    public function inGroup(): bool;
+
+    /**
+     * Vérifie s'il s'agit d'un groupe.
+     *
+     * @return bool
+     */
+    public function isGroup(): bool;
+
+    /**
+     * Vérifie si l'élément est actif.
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool;
+
+    /**
+     * Rendu d'affichage de l'élément.
      *
      * @return string
      */
     public function render(): string;
 
     /**
-     * Définition de l'instance du gestionnaire de la liste de choix.
+     * Définition du niveau de profondeur.
      *
-     * @param RadioChoicesInterface $choices
+     * @param int $depth
      *
      * @return static
      */
-    public function setChoices(RadioChoicesInterface $choices): RadioChoiceInterface;
+    public function setDepth(int $depth = 0): RadioChoiceInterface;
+
+    /**
+     * Définition du nom de qualification.
+     *
+     * @param string|null $name
+     *
+     * @return static
+     */
+    public function setName(?string $name): RadioChoiceInterface;
+
+    /**
+     * Définition du groupe associé.
+     *
+     * @param RadioChoiceInterface $group
+     *
+     * @return static
+     */
+    public function setGroup(RadioChoiceInterface $group): RadioChoiceInterface;
 }

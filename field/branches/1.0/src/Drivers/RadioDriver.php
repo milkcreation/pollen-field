@@ -23,7 +23,13 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
             parent::defaultParams(),
             [
                 /**
-                 * @var string $checked Valeur de sélection du bouton radio.
+                 * Intitulé de qualification
+                 * @var string|null
+                 */
+                'label'   => null,
+                /**
+                 * Valeur de sélection du bouton radio.
+                 * @var string $checked
                  */
                 'checked' => 'on',
             ]
@@ -63,6 +69,21 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
 
         if ($this->isChecked()) {
             $this->push('attrs', 'checked');
+        }
+
+        if ($label = $this->get('label')) {
+            $params = [
+                'attrs'   => [],
+                'content' => $label,
+            ];
+
+            if (!($id = $this->get('attrs.id'))) {
+                $id = 'FieldCheckbox-' . $this->getIndex();
+                $this->set('attrs.id', $id);
+            }
+            $params['attrs']['for'] = $id;
+
+            $this->set('label', $this->field('label', $params));
         }
 
         return parent::render();

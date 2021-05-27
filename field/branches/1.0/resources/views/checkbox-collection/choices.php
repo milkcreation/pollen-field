@@ -1,14 +1,11 @@
 <?php
 /**
  * @var Pollen\Field\FieldViewLoaderInterface $this
- * @var Pollen\Field\Drivers\CheckboxCollection\CheckboxChoiceInterface $choice
+ * @var Pollen\Field\Drivers\CheckboxCollection\CheckboxChoiceInterface[] $choices
  */
-
 ?>
 <ul class="FieldCheckboxCollection-choices">
-    <?php foreach ($this->get('choices', []) as $choice) : ?>
-        <li class="FieldCheckboxCollection-choice">
-            <?php echo $choice; ?>
-        </li>
+    <?php foreach ($choices as $choice) : ?>
+        <?php $this->insert('choice', compact('choice')); ?>
     <?php endforeach; ?>
 </ul>

@@ -255,6 +255,7 @@ abstract class FieldDriver implements FieldDriverInterface
         if (!$this->get('attrs.id')) {
             $this->forget('attrs.id');
         }
+
         return $this;
     }
 

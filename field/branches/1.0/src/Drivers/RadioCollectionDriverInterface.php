@@ -9,9 +9,9 @@ use Pollen\Field\FieldDriverInterface;
 interface RadioCollectionDriverInterface extends FieldDriverInterface
 {
     /**
-     * Récupération des valeur de selection des boutons radios.
+     * Récupération de la valeur de selection des boutons radios.
      *
-     * @return array
+     * @return string|null
      */
-    public function getCheckedValues(): array;
+    public function getCheckedValue(): ?string;
 }

@@ -5,6 +5,6 @@
 ?>
 <?php $this->before(); ?>
 <nav <?php $this->attrs(); ?>>
-    <?php echo $this->get('choices'); ?>
+    <?php $this->insert('choices', $this->all()); ?>
 </nav>
 <?php $this->after();

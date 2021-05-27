@@ -6,17 +6,16 @@ namespace Pollen\Field\Drivers;
 
 use Pollen\Field\FieldDriverInterface;
 use Pollen\Field\Drivers\RadioCollection\RadioChoiceInterface;
-use Pollen\Field\Drivers\RadioCollection\RadioChoices;
-use Pollen\Field\Drivers\RadioCollection\RadioChoicesInterface;
+use Pollen\Field\Drivers\RadioCollection\RadioChoiceCollection;
+use Pollen\Field\Drivers\RadioCollection\RadioChoiceCollectionInterface;
 use Pollen\Field\FieldDriver;
-use Pollen\Support\Arr;
 
 class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriverInterface
 {
     /**
-     * @var array
+     * @var string|null
      */
-    protected $checkedValues = [];
+    protected $checkedValue;
 
     /**
      * @inheritDoc
@@ -27,7 +26,7 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
             parent::defaultParams(),
             [
                 /**
-                 * @var array|RadioDriverInterface[]|RadioChoiceInterface[]|RadioChoicesInterface $choices
+                 * @var array|RadioDriverInterface[]|RadioChoiceInterface[]|RadioChoiceCollectionInterface $choices
                  */
                 'choices' => [],
             ]
@@ -37,9 +36,9 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
     /**
      * @inheritDoc
      */
-    public function getCheckedValues(): array
+    public function getCheckedValue(): ?string
     {
-        return $this->checkedValues;
+        return $this->checkedValue;
     }
 
     /**
@@ -48,7 +47,7 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
     public function parseAttrValue(): FieldDriverInterface
     {
         if ($value = $this->pull('value')) {
-            $this->checkedValues = Arr::wrap($value);
+            $this->checkedValue = (string)$value;
         }
 
         return $this;
@@ -60,11 +59,10 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
     public function render(): string
     {
         $choices = $this->get('choices', []);
-        if (!$choices instanceof RadioChoicesInterface) {
-            $choices = new RadioChoices($choices);
+        if (!$choices instanceof RadioChoiceCollectionInterface) {
+            $this->set('choices', $choices = new RadioChoiceCollection($choices));
         }
-
-        $this->set('choices', $choices->setCollector($this)->build());
+        $choices->setName($this->getName())->setChecked($this->getCheckedValue())->walk();
 
         return parent::render();
     }

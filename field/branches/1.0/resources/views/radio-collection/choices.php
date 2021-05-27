@@ -1,14 +1,11 @@
 <?php
 /**
  * @var Pollen\Field\FieldViewLoaderInterface $this
- * @var Pollen\Field\Drivers\RadioCollection\RadioChoiceInterface $choice
+ * @var Pollen\Field\Drivers\RadioCollection\RadioChoiceInterface[] $choices
  */
-
 ?>
 <ul class="FieldRadioCollection-choices">
-    <?php foreach ($this->get('choices', []) as $choice) : ?>
-        <li class="FieldRadioCollection-choice">
-            <?php echo $choice; ?>
-        </li>
+    <?php foreach ($choices as $choice) : ?>
+        <?php $this->insert('choice', compact('choice')); ?>
     <?php endforeach; ?>
 </ul>
