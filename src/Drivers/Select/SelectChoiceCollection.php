@@ -96,9 +96,9 @@ class SelectChoiceCollection implements SelectChoiceCollectionInterface
         foreach ($selectChoiceDefs as $k => $selectChoiceDef) {
             if (!$selectChoiceDef instanceof SelectChoiceInterface) {
                 if (is_scalar($selectChoiceDef)) {
-                    $selectChoice = new SelectChoice($k, $selectChoiceDef);
+                    $selectChoice = new SelectChoice((string)$k, $selectChoiceDef);
                 } elseif (is_array($selectChoiceDef)) {
-                    $selectChoice = new SelectChoice($k, $k, true);
+                    $selectChoice = new SelectChoice((string)$k, $k, true);
 
                     $this->walk($selectChoiceDef, $depth + 1, $selectChoice);
                 } else {

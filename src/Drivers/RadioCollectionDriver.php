@@ -46,9 +46,8 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
      */
     public function parseAttrValue(): FieldDriverInterface
     {
-        if ($value = $this->pull('value')) {
-            $this->checkedValue = (string)$value;
-        }
+        $value = $this->pull('value');
+        $this->checkedValue = $value !== null ? (string)$value : null;
 
         return $this;
     }
