@@ -80,7 +80,7 @@ class RadioDriver extends FieldDriver implements RadioDriverInterface
             ];
 
             if (!($id = $this->get('attrs.id'))) {
-                $id = 'FieldCheckbox-' . $this->getIndex();
+                $id = 'FieldRadio-' . $this->getIndex();
                 $this->set('attrs.id', $id);
             }
             $params['attrs']['for'] = $id;
