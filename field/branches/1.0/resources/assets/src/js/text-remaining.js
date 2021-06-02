@@ -3,8 +3,7 @@
 import jQuery from 'jquery';
 import 'jquery-ui/ui/core';
 import 'jquery-ui/ui/widget';
-import 'jquery-ui/ui/widgets/sortable';
-import '../../../observer/js/scripts';
+//import '../../../observer/js/scripts';
 
 jQuery(function ($) {
   $.widget('tify.tifyTextRemaining', {
@@ -135,8 +134,8 @@ jQuery(function ($) {
   $(document).ready(function () {
     $('[data-control="text-remaining"]').tifyTextRemaining();
 
-    $.tify.observe('[data-control="text-remaining"]', function (i, target) {
+    /*$.tify.observe('[data-control="text-remaining"]', function (i, target) {
       $(target).tifyTextRemaining();
-    });
+    });*/
   });
 });

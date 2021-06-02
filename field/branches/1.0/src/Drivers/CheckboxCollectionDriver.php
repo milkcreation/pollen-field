@@ -48,7 +48,7 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
     public function parseAttrName(): FieldDriverInterface
     {
         if ($name = $this->pull('name')) {
-            $this->set('attrs.name', $name . '[]');
+            $this->set('checkboxes.attrs.name', $name . '[]');
         }
         return $this;
     }
@@ -64,7 +64,6 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
         return $this;
     }
 
-
     /**
      * @inheritDoc
      */
@@ -74,7 +73,7 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
         if (!$choices instanceof CheckboxChoiceCollectionInterface) {
             $this->set('choices', $choices = new CheckboxChoiceCollection($choices));
         }
-        $choices->setName($this->getName())->setChecked($this->getCheckedValues())->walk();
+        $choices->setName($this->get('checkboxes.attrs.name'))->setChecked($this->getCheckedValues())->walk();
 
         return parent::render();
     }

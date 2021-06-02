@@ -44,6 +44,17 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
     /**
      * @inheritDoc
      */
+    public function parseAttrName(): FieldDriverInterface
+    {
+        if ($name = $this->pull('name')) {
+            $this->set('radios.attrs.name', $name);
+        }
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function parseAttrValue(): FieldDriverInterface
     {
         $value = $this->pull('value');
@@ -61,7 +72,7 @@ class RadioCollectionDriver extends FieldDriver implements RadioCollectionDriver
         if (!$choices instanceof RadioChoiceCollectionInterface) {
             $this->set('choices', $choices = new RadioChoiceCollection($choices));
         }
-        $choices->setName($this->getName())->setChecked($this->getCheckedValue())->walk();
+        $choices->setName($this->get('radios.attrs.name'))->setChecked($this->getCheckedValue())->walk();
 
         return parent::render();
     }
