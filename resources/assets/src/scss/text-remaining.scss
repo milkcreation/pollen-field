@@ -2,7 +2,6 @@
 @import "./variables";
 
 // Customization
-/** STYLES DE CONTROLE (recommandé) */
 [data-control="text-remaining.wrapper"],
 [data-control="text-remaining.wrapper"] > * {
   box-sizing: border-box;
@@ -21,12 +20,9 @@
   display: inline-block;
 }
 
-/** STYLES GENERAUX */
 .FieldTextRemaining-wrapper {
-  padding-bottom: 8px;
-
   .FieldTextRemaining + .FieldTextRemaining-infos {
-    bottom: 2px;
+    bottom: -5px;
   }
 }
 
@@ -42,7 +38,6 @@
   right: 0;
   display: none;
   font-size: 9px;
-  padding: 0 5px;
   line-height: 1;
 }
 

@@ -5,7 +5,7 @@
 @import "./checkbox/variables";
 
 // Customization
-.FieldCheckbox {
+.FieldCheckbox--base {
   display: none;
 
   + .FieldLabel {
@@ -52,5 +52,54 @@
   & + .FieldLabel::before {
     border: #{$checkbox-box-border-width}px solid $checkbox-box-border-color;
     background-color: $checkbox-box-background-color;
+  }
+}
+
+.FieldCheckbox-toggleWrapper {
+  position: relative;
+  border: #{$checkbox-box-border-width}px solid $checkbox-box-border-color;
+  width:40px;
+  height: 20px;
+  content: " ";
+  display: inline-block;
+  border-radius: 40px;
+
+  .FieldCheckbox {
+    display:none;
+
+    &:checked + .FieldLabel {
+      background-color: $checkbox-box-checked-background-color;
+      &::before {
+        left:100%;
+      }
+    }
+  }
+
+  .FieldLabel {
+    position: absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    border-radius: 40px;
+    cursor: pointer;
+    background-color: $checkbox-box-background-color;
+    transition: background-color .3s;
+
+    &::before {
+      position: absolute;
+      content: " ";
+      display: block;
+      top:50%;
+      left:18px;
+      width:18px;
+      height: 18px;
+      margin-top: -10px;
+      border-radius: 20px;
+      background-color: white;
+      transform: translateX(-100%);
+      border: #{$checkbox-box-border-width}px solid $checkbox-box-border-color;
+      transition: left .3s;
+    }
   }
 }
