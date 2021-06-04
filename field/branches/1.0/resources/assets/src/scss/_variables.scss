@@ -22,6 +22,5 @@ $field-colors: (
   @if type-of($alias) != string {
     $alias : "#{$alias}";
   }
-
   @return map.get($field-colors, #{$alias});
 }

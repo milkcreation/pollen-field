@@ -6,6 +6,7 @@ namespace Pollen\Field\Drivers;
 
 use Pollen\Field\FieldDriver;
 use Pollen\Field\FieldDriverInterface;
+use Pollen\Field\Drivers\LabelDriverInterface;
 
 class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
 {
@@ -23,10 +24,15 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
             parent::defaultParams(),
             [
                 /**
-                 * Intitulé de qualification
-                 * @var string|null
+                 * Style de la case à cocher
+                 * @var string|bool base|toggle|none|
                  */
-                'label' => null,
+                'theme'   => 'base',
+                /**
+                 * Intitulé de qualification
+                 * @var string|array|LabelDriverInterface
+                 */
+                'label'   => null,
                 /**
                  * Valeur de sélection de la case à cocher.
                  * @var string
@@ -73,19 +79,51 @@ class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
             $this->push('attrs', 'checked');
         }
 
-        if ($label = $this->get('label')) {
-            $params = [
-                'attrs'   => [],
-                'content' => $label
-            ];
-
-            if (!($id = $this->get('attrs.id'))) {
-                $id = 'FieldCheckbox-' . $this->getIndex();
-                $this->set('attrs.id', $id);
+        if ($theme = $this->get('theme')) {
+            if ($theme === true || !in_array($theme, ['base', 'toggle', 'none'], true)) {
+                $theme = 'base';
             }
-            $params['attrs']['for'] = $id;
 
-            $this->set('label', $this->field('label', $params));
+            if ($theme === 'base' && !$this->get('label')) {
+                $this->set('label', '');
+            } elseif ($theme === 'toggle') {
+                $this->set('label', '');
+            }
+
+            $this->set(
+                'attrs.class',
+                sprintf((($class = $this->get('attrs.class')) ? "$class %s" : "%s"), "FieldCheckbox--$theme")
+            );
+        } else {
+            $this->set('theme', 'none');
+        }
+
+        if ($this->get('label') !== null) {
+            $label = $this->get('label');
+
+            if (!$label instanceof LabelDriverInterface) {
+                $params = [
+                    'attrs' => [],
+                ];
+
+                if (is_string($label)) {
+                    $params['content'] = $label;
+                }
+
+                if (!($id = $this->get('attrs.id'))) {
+                    $id = 'FieldCheckbox-' . $this->getIndex();
+                    $this->set('attrs.id', $id);
+                }
+                $params['attrs']['for'] = $id;
+
+                if (is_array($label)) {
+                    $params = array_merge($params, $label);
+                }
+
+                $this->set('label', $this->field('label', $params));
+            } else {
+                $this->set('label', $label);
+            }
         }
 
         return parent::render();

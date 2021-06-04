@@ -1,8 +1,8 @@
 // Variables
 @import "./variables";
 
-// Dépendances
-@import "vendor/pollen-solutions/partial/resources/assets/src/scss/media-library";
+// Dependencies
+@import "~@pollen-solutions/partial/resources/assets/src/scss/media-library";
 
 // Customization
 [aria-selected="false"] > [data-control="media-image.remove"] {
