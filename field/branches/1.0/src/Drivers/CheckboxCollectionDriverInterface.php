@@ -11,7 +11,7 @@ interface CheckboxCollectionDriverInterface extends FieldDriverInterface
     /**
      * Récupération des valeur de selection des cases à cocher.
      *
-     * @return array
+     * @return array|null
      */
-    public function getCheckedValues(): array;
+    public function getCheckedValues(): ?array;
 }
