@@ -109,7 +109,7 @@ class RadioChoiceCollection implements RadioChoiceCollectionInterface
         foreach ($radioChoiceDefs as $k => $radioChoiceDef) {
             if (!$radioChoiceDef instanceof RadioChoiceInterface) {
                 if (is_scalar($radioChoiceDef)) {
-                    $radioChoice = new RadioChoice($k, $radioChoiceDef);
+                    $radioChoice = new RadioChoice(!is_string($k) ? $radioChoiceDef : $k, $radioChoiceDef);
                 } elseif (is_array($radioChoiceDef)) {
                     $radioChoice = new RadioChoice($k, $k, true);
 
