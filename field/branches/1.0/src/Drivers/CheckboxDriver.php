@@ -6,7 +6,6 @@ namespace Pollen\Field\Drivers;
 
 use Pollen\Field\FieldDriver;
 use Pollen\Field\FieldDriverInterface;
-use Pollen\Field\Drivers\LabelDriverInterface;
 
 class CheckboxDriver extends FieldDriver implements CheckboxDriverInterface
 {

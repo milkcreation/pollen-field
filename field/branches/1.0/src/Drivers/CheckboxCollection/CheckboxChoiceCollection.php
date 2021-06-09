@@ -111,7 +111,7 @@ class CheckboxChoiceCollection implements CheckboxChoiceCollectionInterface
         foreach ($checkboxChoiceDefs as $k => $checkboxChoiceDef) {
             if (!$checkboxChoiceDef instanceof CheckboxChoiceInterface) {
                 if (is_scalar($checkboxChoiceDef)) {
-                    $checkboxChoice = new CheckboxChoice($k, $checkboxChoiceDef);
+                    $checkboxChoice = new CheckboxChoice(!is_string($k) ? $checkboxChoiceDef : $k, $checkboxChoiceDef);
                 } elseif (is_array($checkboxChoiceDef)) {
                     $checkboxChoice = new CheckboxChoice($k, $k, true);
 
