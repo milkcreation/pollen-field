@@ -37,7 +37,7 @@ class CheckboxCollectionDriver extends FieldDriver implements CheckboxCollection
     /**
      * @inheritDoc
      */
-    public function getCheckedValues(): array
+    public function getCheckedValues(): ?array
     {
         return $this->checkedValues;
     }
