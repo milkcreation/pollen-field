@@ -15,8 +15,9 @@ use Pollen\Support\Proxy\HttpRequestProxy;
 use Pollen\Support\Proxy\PartialProxy;
 use Pollen\Support\Html;
 use Pollen\Support\Str;
-use Pollen\View\ViewEngine;
-use Pollen\View\ViewEngineInterface;
+use Pollen\View\View;
+use Pollen\View\Engines\Plates\PlatesViewEngine;
+use Pollen\View\ViewInterface;
 
 abstract class FieldDriver implements FieldDriverInterface
 {
@@ -28,34 +29,29 @@ abstract class FieldDriver implements FieldDriverInterface
 
     /**
      * Indice de l'instance dans le gestionnaire.
-     * @var int
      */
-    private $index = 0;
+    private int $index = 0;
 
     /**
      * Alias de qualification.
-     * @var string
      */
-    protected $alias = '';
+    protected string $alias = '';
 
     /**
      * Liste des attributs par défaut.
-     * @var array
      */
-    protected static $defaults = [];
+    protected static array $defaults = [];
 
     /**
      * Identifiant de qualification.
      * {@internal par défaut concaténation de l'alias et de l'indice.}
-     * @var string
      */
-    protected $id = '';
+    protected string $id = '';
 
     /**
      * Instance du moteur de gabarits d'affichage.
-     * @var ViewEngineInterface
      */
-    protected $viewEngine;
+    protected ?ViewInterface $view = null;
 
     /**
      * @param FieldManagerInterface $fieldManager
@@ -108,7 +104,6 @@ abstract class FieldDriver implements FieldDriverInterface
             $this->parseParams();
 
             $this->setBooted();
-
             //events()->trigger('field.driver.booted', [$this->getAlias(), $this]);
         }
     }
@@ -146,11 +141,11 @@ abstract class FieldDriver implements FieldDriverInterface
                 /**
                  * @var string|null $name Nom de qualification de la requête HTTP de soumission du formulaire.
                  */
-                'name' => null,
+                'name'   => null,
                 /**
                  * @var string|null $value Valeur courante|Issue de la requête HTTP de soumission du formulaire.
                  */
-                'value' => null,
+                'value'  => null,
                 /**
                  * @var array $viewer Liste des attributs de configuration du pilote d'affichage.
                  */
@@ -158,7 +153,7 @@ abstract class FieldDriver implements FieldDriverInterface
                 /**
                  * @var Closure|array|string|null
                  */
-                'render' => null
+                'render' => null,
             ]
         );
     }
@@ -234,7 +229,7 @@ abstract class FieldDriver implements FieldDriverInterface
     {
         $base = $this->getBaseClass();
 
-        $default_class = "{$base} {$base}--" . $this->getIndex();
+        $default_class = "$base $base--" . $this->getIndex();
         if (!$this->has('attrs.class')) {
             $this->set('attrs.class', $default_class);
         } else {
@@ -331,9 +326,9 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function setViewEngine(ViewEngineInterface $viewEngine): FieldDriverInterface
+    public function setView(ViewInterface $view): FieldDriverInterface
     {
-        $this->viewEngine = $viewEngine;
+        $this->view = $view;
 
         return $this;
     }
@@ -343,9 +338,7 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function view(?string $view = null, array $data = [])
     {
-        if ($this->viewEngine === null) {
-            $directory = null;
-            $overrideDir = null;
+        if ($this->view === null) {
             $default = $this->field()->config('default.driver.viewer', []);
 
             $directory = $this->get('viewer.directory');
@@ -381,39 +374,47 @@ abstract class FieldDriver implements FieldDriverInterface
                 }
             }
 
-            $this->viewEngine = new ViewEngine();
-            if ($container = $this->field()->getContainer()) {
-                $this->viewEngine->setContainer($container);
-            }
+            $this->view = View::createFromPlates(
+                function (PlatesViewEngine $platesViewEngine) use ($directory, $overrideDir) {
+                    $platesViewEngine
+                        ->setDelegate($this)
+                        ->setTemplateClass(FieldTemplate::class)
+                        ->setDirectory($directory);
 
-            $this->viewEngine->setDirectory($directory)->setDelegate($this)->setLoader(FieldViewLoader::class);
+                    if ($overrideDir !== null) {
+                        $platesViewEngine->setOverrideDir($overrideDir);
+                    }
 
-            if ($overrideDir !== null) {
-                $this->viewEngine->addFolder('_override_dir', $overrideDir, true);
-            }
+                    if ($container = $this->partial()->getContainer()) {
+                        $platesViewEngine->setContainer($container);
+                    }
 
-            $mixins = [
-                'after',
-                'attrs',
-                'before',
-                'content',
-                'getAlias',
-                'getId',
-                'getIndex',
-                'getName',
-                'getValue'
-            ];
+                    $mixins = [
+                        'after',
+                        'attrs',
+                        'before',
+                        'content',
+                        'getAlias',
+                        'getId',
+                        'getIndex',
+                        'getName',
+                        'getValue',
+                    ];
 
-            foreach($mixins as $mixin){
-                $this->viewEngine->setDelegateMixin($mixin);
-            }
+                    foreach ($mixins as $mixin) {
+                        $platesViewEngine->setDelegateMixin($mixin);
+                    }
+
+                    return $platesViewEngine;
+                }
+            );
         }
 
         if (func_num_args() === 0) {
-            return $this->viewEngine;
+            return $this->view;
         }
 
-        return $this->viewEngine->render($view, $data);
+        return $this->view->render($view, $data);
     }
 
     /**
@@ -426,8 +427,10 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function xhrResponse(...$args): ResponseInterface
     {
-        return new JsonResponse([
-            'success' => true,
-        ]);
+        return new JsonResponse(
+            [
+                'success' => true,
+            ]
+        );
     }
 }
