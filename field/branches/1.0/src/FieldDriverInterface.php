@@ -9,13 +9,14 @@ use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
 use Pollen\Support\Proxy\HttpRequestProxyInterface;
 use Pollen\Support\Proxy\FieldProxyInterface;
 use Pollen\Support\Proxy\PartialProxyInterface;
-use Pollen\View\ViewInterface;
+use Pollen\Support\Proxy\ViewProxyInterface;
 
 interface FieldDriverInterface extends
     HttpRequestProxyInterface,
     FieldProxyInterface,
     PartialProxyInterface,
-    ParamsBagDelegateTraitInterface
+    ParamsBagDelegateTraitInterface,
+    ViewProxyInterface
 {
     /**
      * Résolution de sortie de la classe en tant que chaîne de caractère.
@@ -181,25 +182,6 @@ interface FieldDriverInterface extends
      * @return static
      */
     public function setIndex(int $index): FieldDriverInterface;
-
-    /**
-     * Définition de l'instance du moteur d'affichage.
-     *
-     * @param ViewInterface $view
-     *
-     * @return static
-     */
-    public function setView(ViewInterface $view): FieldDriverInterface;
-
-    /**
-     * Instance du gestionnaire de gabarits d'affichage ou rendu du gabarit d'affichage.
-     *
-     * @param string|null $view Nom de qualification du gabarit.
-     * @param array $data Liste des variables passées en argument.
-     *
-     * @return ViewInterface|string
-     */
-    public function view(?string $view = null, array $data = []);
 
     /**
      * Chemin absolu du répertoire des gabarits d'affichage.
