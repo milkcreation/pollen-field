@@ -14,10 +14,9 @@ use Pollen\Support\Proxy\FieldProxy;
 use Pollen\Support\Proxy\HttpRequestProxy;
 use Pollen\Support\Proxy\PartialProxy;
 use Pollen\Support\Html;
+use Pollen\Support\Proxy\ViewProxy;
 use Pollen\Support\Str;
-use Pollen\View\View;
 use Pollen\View\Engines\Plates\PlatesViewEngine;
-use Pollen\View\ViewInterface;
 
 abstract class FieldDriver implements FieldDriverInterface
 {
@@ -26,6 +25,7 @@ abstract class FieldDriver implements FieldDriverInterface
     use HttpRequestProxy;
     use PartialProxy;
     use ParamsBagDelegateTrait;
+    use ViewProxy;
 
     /**
      * Indice de l'instance dans le gestionnaire.
@@ -47,11 +47,6 @@ abstract class FieldDriver implements FieldDriverInterface
      * {@internal par défaut concaténation de l'alias et de l'indice.}
      */
     protected string $id = '';
-
-    /**
-     * Instance du moteur de gabarits d'affichage.
-     */
-    protected ?ViewInterface $view = null;
 
     /**
      * @param FieldManagerInterface $fieldManager
@@ -326,17 +321,7 @@ abstract class FieldDriver implements FieldDriverInterface
     /**
      * @inheritDoc
      */
-    public function setView(ViewInterface $view): FieldDriverInterface
-    {
-        $this->view = $view;
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function view(?string $view = null, array $data = [])
+    public function view(?string $name = null, array $data = [])
     {
         if ($this->view === null) {
             $default = $this->field()->config('default.driver.viewer', []);
@@ -374,47 +359,39 @@ abstract class FieldDriver implements FieldDriverInterface
                 }
             }
 
-            $this->view = View::createFromPlates(
-                function (PlatesViewEngine $platesViewEngine) use ($directory, $overrideDir) {
-                    $platesViewEngine
-                        ->setDelegate($this)
-                        ->setTemplateClass(FieldTemplate::class)
-                        ->setDirectory($directory);
+            $viewEngine = new PlatesViewEngine();
 
-                    if ($overrideDir !== null) {
-                        $platesViewEngine->setOverrideDir($overrideDir);
-                    }
+            $viewEngine->setDelegate($this)
+                ->setTemplateClass(FieldTemplate::class)
+                ->setDirectory($directory);
 
-                    if ($container = $this->partial()->getContainer()) {
-                        $platesViewEngine->setContainer($container);
-                    }
+            if ($overrideDir !== null) {
+                $viewEngine->setOverrideDir($overrideDir);
+            }
 
-                    $mixins = [
-                        'after',
-                        'attrs',
-                        'before',
-                        'content',
-                        'getAlias',
-                        'getId',
-                        'getIndex',
-                        'getName',
-                        'getValue',
-                    ];
+            $mixins = [
+                'after',
+                'attrs',
+                'before',
+                'content',
+                'getAlias',
+                'getId',
+                'getIndex',
+                'getName',
+                'getValue',
+            ];
+            foreach ($mixins as $mixin) {
+                $viewEngine->setDelegateMixin($mixin);
+            }
 
-                    foreach ($mixins as $mixin) {
-                        $platesViewEngine->setDelegateMixin($mixin);
-                    }
-
-                    return $platesViewEngine;
-                }
-            );
+            $this->view = $this->viewManager()->createView($viewEngine);
         }
 
         if (func_num_args() === 0) {
             return $this->view;
         }
 
-        return $this->view->render($view, $data);
+        return $this->view->render($name, $data);
     }
 
     /**
