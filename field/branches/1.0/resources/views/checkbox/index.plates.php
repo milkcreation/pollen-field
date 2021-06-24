@@ -1,11 +1,11 @@
 <?php
 /**
- * @var Pollen\Field\FieldTemplate $this
+ * @var Pollen\Field\FieldTemplateInterface $this
  */
 ?>
 <?php $this->layout($this->get('theme') . "-wrapper", $this->all()); ?>
-<?php echo $this->partial('tag', [
-    'tag'   => 'input',
+
+<?php echo $this->field('input', [
     'attrs' => $this->get('attrs', []),
 ]);
 ?>

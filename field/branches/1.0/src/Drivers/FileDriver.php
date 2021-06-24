@@ -45,6 +45,7 @@ class FileDriver extends FieldDriver implements FileDriverInterface
     public function render(): string
     {
         $this->set('attrs.type', 'file');
+
         if ($this->get('multiple')) {
             $this->push('attrs', 'multiple');
         }

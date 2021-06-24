@@ -1,9 +1,10 @@
 <?php
 /**
- * @var Pollen\Field\FieldTemplate $this
+ * @var Pollen\Field\FieldTemplateInterface $this
  */
 ?>
 <?php $this->before(); ?>
+
     <div <?php $this->attrs(); ?>>
         <div class="FieldToggleSwitch-wrapper">
             <?php echo $this->field('radio', [
@@ -45,4 +46,5 @@
             <span class="FieldToggleSwitch-handler"></span>
         </div>
     </div>
+
 <?php $this->after();

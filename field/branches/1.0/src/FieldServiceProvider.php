@@ -14,6 +14,7 @@ use Pollen\Field\Drivers\DatetimeJsDriver;
 use Pollen\Field\Drivers\FileDriver;
 use Pollen\Field\Drivers\FileJsDriver;
 use Pollen\Field\Drivers\HiddenDriver;
+use Pollen\Field\Drivers\InputDriver;
 use Pollen\Field\Drivers\LabelDriver;
 use Pollen\Field\Drivers\NumberDriver;
 use Pollen\Field\Drivers\NumberJsDriver;
@@ -50,6 +51,7 @@ class FieldServiceProvider extends BootableServiceProvider
         DatepickerDriver::class,
         DatetimeJsDriver::class,
         HiddenDriver::class,
+        InputDriver::class,
         LabelDriver::class,
         NumberDriver::class,
         NumberJsDriver::class,
@@ -145,6 +147,12 @@ class FieldServiceProvider extends BootableServiceProvider
             HiddenDriver::class,
             function () {
                 return new HiddenDriver($this->getContainer()->get(FieldManagerInterface::class));
+            }
+        );
+        $this->getContainer()->add(
+            InputDriver::class,
+            function () {
+                return new InputDriver($this->getContainer()->get(FieldManagerInterface::class));
             }
         );
         $this->getContainer()->add(

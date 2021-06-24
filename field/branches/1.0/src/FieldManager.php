@@ -7,6 +7,7 @@ namespace Pollen\Field;
 use Closure;
 use Exception;
 use InvalidArgumentException;
+use Pollen\Field\Drivers\InputDriver;
 use Pollen\Support\Concerns\ResourcesAwareTrait;
 use Pollen\Support\Proxy\RouterProxy;
 use Pollen\Field\Drivers\ButtonDriver;
@@ -74,6 +75,7 @@ class FieldManager implements FieldManagerInterface
         'file'                => FileDriver::class,
         'file-js'             => FileJsDriver::class,
         'hidden'              => HiddenDriver::class,
+        'input'               => InputDriver::class,
         'label'               => LabelDriver::class,
         'number'              => NumberDriver::class,
         'number-js'           => NumberJsDriver::class,

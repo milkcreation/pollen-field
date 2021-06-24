@@ -1,9 +1,10 @@
 <?php
 /**
- * @var Pollen\Field\FieldTemplate $this
+ * @var Pollen\Field\FieldTemplateInterface $this
  */
 ?>
 <?php $this->before(); ?>
+
 <div <?php echo $this->htmlAttrs($this->get('container.attrs', [])); ?>>
     <div class="FieldPasswordJs-wrapper">
         <a class="FieldPasswordJs-toggle"
@@ -12,10 +13,10 @@
            href="#"
         ></a>
 
-        <?php echo $this->partial('tag', [
-            'tag'   => 'input',
+        <?php echo $this->field('input', [
             'attrs' => $this->get('attrs', []),
         ]); ?>
     </div>
 </div>
+
 <?php $this->after();

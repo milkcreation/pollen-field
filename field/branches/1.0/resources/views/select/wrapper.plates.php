@@ -1,6 +1,6 @@
 <?php
 /**
- * @var Pollen\Field\FieldTemplate $this
+ * @var Pollen\Field\FieldTemplateInterface $this
  */
 ?>
 <div class="FieldSelect-wrapper">

@@ -60,6 +60,7 @@ class NumberJsDriver extends FieldDriver implements NumberJsDriverInterface
         if (!$this->has('attrs.id')) {
             $this->set('attrs.id', 'FieldNumberJs-input--' . $this->getIndex());
         }
+
         $this->set('attrs.type', 'text');
 
         $this->set('attrs.data-control', 'number-js.input');

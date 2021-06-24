@@ -17,6 +17,7 @@ use Pollen\Support\Html;
 use Pollen\Support\Proxy\ViewProxy;
 use Pollen\Support\Str;
 use Pollen\View\Engines\Plates\PlatesViewEngine;
+use Pollen\View\ViewInterface;
 
 abstract class FieldDriver implements FieldDriverInterface
 {
@@ -47,6 +48,11 @@ abstract class FieldDriver implements FieldDriverInterface
      * {@internal par défaut concaténation de l'alias et de l'indice.}
      */
     protected string $id = '';
+
+    /**
+     * Template view instance.
+     */
+    protected ?ViewInterface $view = null;
 
     /**
      * @param FieldManagerInterface $fieldManager
@@ -360,9 +366,7 @@ abstract class FieldDriver implements FieldDriverInterface
             }
 
             $viewEngine = new PlatesViewEngine();
-
-            $viewEngine->setDelegate($this)
-                ->setTemplateClass(FieldTemplate::class)
+            $viewEngine
                 ->setDirectory($directory);
 
             if ($overrideDir !== null) {
@@ -381,7 +385,7 @@ abstract class FieldDriver implements FieldDriverInterface
                 'getValue',
             ];
             foreach ($mixins as $mixin) {
-                $viewEngine->setDelegateMixin($mixin);
+                $viewEngine->addFunction($mixin, [$this, $mixin]);
             }
 
             $this->view = $this->viewManager()->createView($viewEngine);
