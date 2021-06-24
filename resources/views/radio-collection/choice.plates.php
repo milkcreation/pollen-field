@@ -1,6 +1,6 @@
 <?php
 /**
- * @var Pollen\Field\FieldTemplate $this
+ * @var Pollen\Field\FieldTemplateInterface $this
  * @var Pollen\Field\Drivers\RadioCollection\RadioChoiceInterface $choice
  */
 ?>

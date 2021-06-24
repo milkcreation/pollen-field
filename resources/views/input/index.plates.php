@@ -4,7 +4,10 @@
  */
 ?>
 <?php $this->before(); ?>
-<nav <?php $this->attrs(); ?>>
-    <?php $this->insert('choices', $this->all()); ?>
-</nav>
+
+<?php echo $this->partial('tag', [
+    'tag'   => 'input',
+    'attrs' => $this->get('attrs', []),
+]); ?>
+
 <?php $this->after();

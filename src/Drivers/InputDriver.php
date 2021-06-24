@@ -6,15 +6,16 @@ namespace Pollen\Field\Drivers;
 
 use Pollen\Field\FieldDriver;
 
-class TextDriver extends FieldDriver implements TextDriverInterface
+class InputDriver extends FieldDriver implements InputDriverInterface
 {
     /**
      * @inheritDoc
      */
     public function render(): string
     {
-        $this->set('attrs.type', 'text');
-
+        if (!$this->get('attrs.type')) {
+            $this->set('attrs.type', 'text');
+        }
         return parent::render();
     }
 
@@ -23,6 +24,6 @@ class TextDriver extends FieldDriver implements TextDriverInterface
      */
     public function viewDirectory(): string
     {
-        return $this->field()->resources('/views/text');
+        return $this->field()->resources('/views/input');
     }
 }

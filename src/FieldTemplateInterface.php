@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Pollen\Field;
 
-use Pollen\View\Engines\Plates\PlatesFieldAwareTemplateTrait;
-use Pollen\View\Engines\Plates\PlatesPartialAwareTemplateTrait;
-use Pollen\View\Engines\Plates\PlatesTemplate;
+use Pollen\ViewExtends\PlatesTemplateInterface;
 
 /**
  * @method string after()
@@ -19,8 +17,6 @@ use Pollen\View\Engines\Plates\PlatesTemplate;
  * @method string getName()
  * @method string getValue()
  */
-class FieldTemplate extends PlatesTemplate
+interface FieldTemplateInterface extends PlatesTemplateInterface
 {
-    use PlatesFieldAwareTemplateTrait;
-    use PlatesPartialAwareTemplateTrait;
 }
