@@ -13,9 +13,9 @@ class InputDriver extends FieldDriver implements InputDriverInterface
      */
     public function render(): string
     {
-        if (!$this->get('attrs.type')) {
-            $this->set('attrs.type', 'text');
-        }
+        $type = $this->get('attrs.type', $this->get('type', 'text'));
+        $this->set('attrs.type', $type);
+
         return parent::render();
     }
 

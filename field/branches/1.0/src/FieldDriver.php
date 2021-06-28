@@ -16,7 +16,6 @@ use Pollen\Support\Proxy\PartialProxy;
 use Pollen\Support\Html;
 use Pollen\Support\Proxy\ViewProxy;
 use Pollen\Support\Str;
-use Pollen\View\Engines\Plates\PlatesViewEngine;
 use Pollen\View\ViewInterface;
 
 abstract class FieldDriver implements FieldDriverInterface
@@ -365,15 +364,14 @@ abstract class FieldDriver implements FieldDriverInterface
                 }
             }
 
-            $viewEngine = new PlatesViewEngine();
-            $viewEngine
+            $this->view = $this->viewManager()->createView('plates')
                 ->setDirectory($directory);
 
             if ($overrideDir !== null) {
-                $viewEngine->setOverrideDir($overrideDir);
+                $this->view->setOverrideDir($overrideDir);
             }
 
-            $mixins = [
+            $functions = [
                 'after',
                 'attrs',
                 'before',
@@ -384,11 +382,9 @@ abstract class FieldDriver implements FieldDriverInterface
                 'getName',
                 'getValue',
             ];
-            foreach ($mixins as $mixin) {
-                $viewEngine->addFunction($mixin, [$this, $mixin]);
+            foreach ($functions as $fn) {
+                $this->view->addExtension($fn, [$this, $fn]);
             }
-
-            $this->view = $this->viewManager()->createView($viewEngine);
         }
 
         if (func_num_args() === 0) {
