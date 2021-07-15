@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-import jQuery from 'jquery';
-import 'jquery-ui/ui/core';
-import 'jquery-ui/ui/widget';
-//import '../../../observer/js/scripts';
+import jQuery from 'jquery'
+import 'jquery-ui/ui/core'
+import 'jquery-ui/ui/widget'
+import MutationObserver from '@pollen-solutions/support/resources/assets/src/js/mutation-observer'
 
 jQuery(function ($) {
   $.widget('tify.tifyTextRemaining', {
@@ -22,120 +22,121 @@ jQuery(function ($) {
       },
       limit: false
     },
-    // Instanciation de l'élément.
+
     _create: function () {
-      this.instance = this;
+      this.instance = this
 
-      this.el = this.element;
+      this.el = this.element
 
-      this.id = this.el.data('id');
+      this.id = this.el.data('id')
 
       this.flags = {
         isLimited: false
-      };
+      }
 
-      this._initOptions();
-      this._initFlags();
-      this._initControls();
+      this._initOptions()
+      this._initFlags()
+      this._initControls()
     },
-    // INITIALISATIONS.
+
+    // INITIALIZATIONS.
     // -----------------------------------------------------------------------------------------------------------------
-    // Initialisation des attributs de configuration.
     _initOptions: function () {
       $.extend(
           true,
           this.options,
           this.el.data('options') && $.parseJSON(decodeURIComponent(this.el.data('options'))) || {}
-      );
+      )
     },
-    // Initialisation des indicateurs d'état.
+
     _initFlags: function () {
-      this.flags.isLimited = !!(this.option('limit'));
+      this.flags.isLimited = !!(this.option('limit'))
     },
-    // Initialisation des agents de contrôle.
+
     _initControls: function () {
-      this._initControlWrapper();
-      this._initControlInfos();
-      this._initControlField();
+      this._initControlWrapper()
+      this._initControlInfos()
+      this._initControlField()
     },
-    // Initialisation du controleur d'encapsulation du champ.
+
     _initControlWrapper: function () {
       this.wrapper = this.el.wrap('<div data-control="text-remaining.wrapper"/>')
           .closest('[data-control="text-remaining.wrapper"]')
-          .addClass(this.option('classes.wrapper'));
+          .addClass(this.option('classes.wrapper'))
     },
-    // Initialisation du controleur d'informations de saisie.
+
     _initControlInfos: function () {
       this.infos = $('<span data-control="text-remaining.infos"/>', this.el)
           .appendTo(this.wrapper)
-          .addClass(this.option('classes.infos'));
+          .addClass(this.option('classes.infos'))
     },
-    // Initialisation du controleur de saisie.
+
     _initControlField: function () {
-      this._doReached();
-      this._onType();
+      this._doReached()
+      this._onType()
     },
+
     // ACTIONS.
     // -----------------------------------------------------------------------------------------------------------------
-    // Récupération du nombre de caractères restants.
     _doReached: function () {
-      let max = parseInt(this.option('max') || 0);
+      let max = parseInt(this.option('max') || 0)
 
       if (this.flags.isLimited) {
-        this.el.val(this.el.val().substr(0, max));
+        this.el.val(this.el.val().substr(0, max))
       }
 
-      let infos = this._getInfos(parseInt(max - this.el.val().length));
+      let infos = this._getInfos(parseInt(max - this.el.val().length))
       this.infos
           .html(infos.html)
-          .attr('aria-reached', infos.reached);
+          .attr('aria-reached', infos.reached)
 
-      this._trigger('type');
+      this._trigger('type')
     },
-    // EVENEMENTS.
+
+    // EVENTS.
     // -------------------------------------------------------------------------------------------------------------
-    // Activation de l'agent de contrôle de création d'un nouvel élément.
     _onType: function () {
-      let self = this;
+      let self = this
 
       this.el.on('keyup.text-remaining' + this.instance.uuid, function (e) {
-        e.stopPropagation();
-        e.preventDefault();
+        e.stopPropagation()
+        e.preventDefault()
 
-        self._doReached();
-      });
+        self._doReached()
+      })
     },
-    // RECUPERATEURS.
+
+    // GETTERS.
     // -----------------------------------------------------------------------------------------------------------------
     _getInfos: function (length) {
       let html = '',
-          reached = '';
+          reached = ''
 
       if ((length > 1) || (length < -1)) {
-        html = ('<b>' + length + '</b> ' + this.option('infos.plural')).trim();
+        html = ('<b>' + length + '</b> ' + this.option('infos.plural')).trim()
       } else if (length === 0) {
-        html = ('<b>' + length + '</b> ' + this.option('infos.none')).trim();
+        html = ('<b>' + length + '</b> ' + this.option('infos.none')).trim()
       } else {
-        html = ('<b>' + length + '</b> ' + this.option('infos.singular')).trim();
+        html = ('<b>' + length + '</b> ' + this.option('infos.singular')).trim()
       }
 
       if (length > 0) {
-        reached = 'less';
+        reached = 'less'
       } else if (length < 0) {
-        reached = 'more';
+        reached = 'more'
       } else {
-        reached = 'exact';
+        reached = 'exact'
       }
 
-      return {html: html, reached: reached};
+      return {html: html, reached: reached}
     }
-  });
+  })
 
   $(document).ready(function () {
-    $('[data-control="text-remaining"]').tifyTextRemaining();
+    $('[data-control="text-remaining"]').tifyTextRemaining()
 
-    /*$.tify.observe('[data-control="text-remaining"]', function (i, target) {
-      $(target).tifyTextRemaining();
-    });*/
-  });
-});
+    MutationObserver('[data-control="text-remaining"]', function (target) {
+      $(target).tifyTextRemaining()
+    })
+  })
+})

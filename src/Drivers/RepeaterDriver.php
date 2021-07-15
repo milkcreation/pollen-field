@@ -55,21 +55,29 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
     /**
      * @inheritDoc
      */
+    public function parseParams(): void
+    {
+        $this->parseAttrId()->parseAttrClass()->parseAttrName();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function render(): string
     {
         $defaultClasses = [
             'addnew'  => 'FieldRepeater-addnew ThemeButton--primary ThemeButton--normal',
             'content' => 'FieldRepeater-itemContent',
-            'down'    => 'FieldRepeater-itemSortDown ThemeFeed-itemSortDown',
-            'item'    => 'FieldRepeater-item ThemeFeed-item',
-            'items'   => 'FieldRepeater-items ThemeFeed-items',
-            'order'   => 'FieldRepeater-itemOrder ThemeFeed-itemOrder',
-            'remove'  => 'FieldRepeater-itemRemove ThemeFeed-itemRemove',
-            'sort'    => 'FieldRepeater-itemSortHandle ThemeFeed-itemSortHandle',
-            'up'      => 'FieldRepeater-itemSortUp ThemeFeed-itemSortUp',
+            'down'    => 'FieldRepeater-itemSortDown Card-sortDown',
+            'item'    => 'FieldRepeater-item Card',
+            'items'   => 'FieldRepeater-items Cards',
+            'order'   => 'FieldRepeater-itemOrder Card-order',
+            'remove'  => 'FieldRepeater-itemRemove Card-remove',
+            'sort'    => 'FieldRepeater-itemSortHandle Card-sortHandle',
+            'up'      => 'FieldRepeater-itemSortUp Card-sortUp',
         ];
         foreach ($defaultClasses as $k => $v) {
-            $this->set(["classes.{$k}" => sprintf($this->get("classes.{$k}", '%s'), $v)]);
+            $this->set(["classes.$k" => sprintf($this->get("classes.$k", '%s'), $v)]);
         }
 
         $this->set(
@@ -85,7 +93,7 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
         $button = array_merge(
             [
                 'tag'     => 'a',
-                'content' => __('Ajouter un élément', 'tify'),
+                'content' => 'Ajouter un élément',
             ],
             $button
         );
@@ -135,7 +143,7 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
             ]
         );
 
-        $this->set('value', array_values(Arr::wrap($this->getValue())));
+        $this->set('value', array_values(Arr::wrap($this->get('value'))));
 
         return parent::render();
     }
@@ -155,29 +163,23 @@ class RepeaterDriver extends FieldDriver implements RepeaterDriverInterface
     {
         $request = $this->httpRequest();
 
-        $max = $request->request->get('max', -1);
-        $index = $request->request->get('index', 0);
+        $max = $request->input('max', -1);
+        $index = $request->input('index', 0);
 
-        $this->set(
-            [
-                'name'   => $request->request->get('name', ''),
-                'viewer' => $request->request->get('viewer', []),
-            ]
-        );
+        $this->set('viewer', $request->input('viewer', []));
         $this->parse();
 
         if (($max > 0) && ($index >= $max)) {
             $content = [
                 'success' => false,
-                'data'    => __('Nombre de valeur maximum atteinte', 'tify'),
+                'data'    => 'Nombre de valeur maximum atteinte',
             ];
         } else {
             $content = [
                 'success' => true,
-                'data'    => $this->view('item-wrap', $request->request->all()),
+                'data'    => $this->view('item-wrap', $request->input()->all())
             ];
         }
-
         return new JsonResponse($content);
     }
 }

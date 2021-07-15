@@ -1,64 +1,63 @@
-'use strict';
+'use strict'
 
-import jQuery from 'jquery';
-import 'spectrum-colorpicker/spectrum';
-import '../../../observer/js/scripts';
+import jQuery from 'jquery'
+import 'spectrum-colorpicker/spectrum'
+import MutationObserver from '@pollen-solutions/support/resources/assets/src/js/mutation-observer'
 
 /*
 if (tify.locale.iso[1] !== undefined) {
   try {
-    require('spectrum-colorpicker/i18n/jquery.spectrum-' + tify.locale.iso[1]);
+    require('spectrum-colorpicker/i18n/jquery.spectrum-' + tify.locale.iso[1])
   } catch (e) {
-    console.log('Unavailable spectrum language ' + tify.locale.iso[1]);
+    console.log('Unavailable spectrum language ' + tify.locale.iso[1])
   }
 }
 */
 
 jQuery(function ($) {
-
   $.widget('tify.tifyColorpicker', {
     widgetEventPrefix: 'colorpicker:',
     options: {
       classes: {}
     },
     controls: {},
-    // Instanciation de l'élément.
+
     _create: function () {
-      this.instance = this;
+      this.instance = this
 
-      this.el = this.element;
+      this.el = this.element
 
-      this._initOptions();
-      this._initControls();
+      this._initOptions()
+      this._initControls()
     },
-    // INITIALISATIONS.
+
+    // INITIALIZATIONS.
     // -----------------------------------------------------------------------------------------------------------------
-    // Initialisation des attributs de configuration.
     _initOptions: function () {
       $.extend(
           true,
           this.options,
           this.el.data('options') && $.parseJSON(decodeURIComponent(this.el.data('options'))) || {}
-      );
+      )
     },
-    // Initialisation des agents de contrôle.
+
     _initControls: function () {
-      let self = this;
+      let self = this
           /*o = $.extend({
             change: function (color) {
-              $(obj).val(color.toHexString());
+              $(obj).val(color.toHexString())
             }
-          }, self.option());*/
+          }, self.option())*/
 
-      this.el.spectrum(self.option());
+      this.el.spectrum(self.option())
     }
-  });
+  })
 
   $(document).ready(function () {
-    $('[data-control="colorpicker"]').tifyColorpicker();
+    $('[data-control="colorpicker"]').tifyColorpicker()
 
-    $.tify.observe('[data-control="colorpicker"]', function (i, target) {
-       $(target).tifyColorpicker();
-    });
-  });
-});
+    MutationObserver('[data-control="colorpicker"]', function (i, target) {
+      $(target).tifyColorpicker()
+    })
+  })
+})

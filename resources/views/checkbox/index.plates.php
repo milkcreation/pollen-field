@@ -7,6 +7,6 @@
 
 <?php echo $this->field('input', [
     'attrs' => $this->get('attrs', []),
-]);
-?>
+]); ?>
+
 <?php echo $this->get('label'); ?>

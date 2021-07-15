@@ -10,7 +10,7 @@
             <?php $this->insert('item-wrap', [
                 'args'  => $this->get('args', []),
                 'index' => $index,
-                'name'  => $this->get('name'),
+                'name'  => $this->getName(),
                 'value' => $value,
             ]); ?>
         <?php endforeach; ?>

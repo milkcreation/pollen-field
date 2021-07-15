@@ -1,49 +1,48 @@
-'use strict';
+'use strict'
 
-import jQuery from 'jquery';
-import Dropzone from 'dropzone/dist/min/dropzone.min';
-import 'jquery-ui/ui/core';
-import 'jquery-ui/ui/widget';
-import '../../../observer/js/scripts';
+import jQuery from 'jquery'
+import Dropzone from 'dropzone/dist/min/dropzone.min'
+import 'jquery-ui/ui/core'
+import 'jquery-ui/ui/widget'
+import MutationObserver from '@pollen-solutions/support/resources/assets/src/js/mutation-observer'
 
 jQuery(function ($) {
   $.widget('tify.tifyFileJs', {
     widgetEventPrefix: 'file-js:',
     options: {},
-    // Instanciation de l'élément.
+
     _create: function () {
-      this.instance = this;
+      this.instance = this
 
-      this.el = this.element;
+      this.el = this.element
 
-      this._initOptions();
-      this._initUploader();
-      this._initEvents();
+      this._initOptions()
+      this._initUploader()
+      this._initEvents()
     },
-    // Initialisation des attributs de configuration.
+
     _initOptions: function () {
       $.extend(
           true,
           this.options,
           this.el.data('options') && $.parseJSON(decodeURIComponent(this.el.data('options'))) || {}
-      );
+      )
     },
-    // Initialisation du pilote de téléchargement.
+
     _initUploader: function () {
       let self = this,
-          exists = this.el.get(0).dropzone;
+          exists = this.el.get(0).dropzone
 
       if (exists === undefined) {
-        this.dropzone = new Dropzone(this.el.get(0), self.option('dropzone') || {});
+        this.dropzone = new Dropzone(this.el.get(0), self.option('dropzone') || {})
       }
     },
-    // Initialisation des événements.
-    _initEvents: function () {
-      let self = this;
 
-      // Délégation d'appel des événement de dropzone.
+    _initEvents: function () {
+      let self = this
+
       // @see https://www.dropzonejs.com/#event-list
-      // ex. $('[data-control="file-js"]').on('file-js:success', function (e, file, resp) { console.log(resp);});
+      // ex. $('[data-control="file-js"]').on('file-js:success', function (e, file, resp) { console.log(resp)})
       if (this.dropzone !== undefined) {
         let events = [
           // All of these receive the event as first parameter:
@@ -56,21 +55,21 @@ jQuery(function ($) {
           'processingmultiple', 'sendingmultiple', 'successmultiple', 'completemultiple', 'canceledmultiple',
           // Special events:
           'totaluploadprogress', 'reset', 'queuecomplete'
-        ];
+        ]
         events.forEach(function (event) {
           self.dropzone.on(event, function (e) {
-            self._trigger(event, e, arguments);
-          });
-        });
+            self._trigger(event, e, arguments)
+          })
+        })
       }
     }
-  });
+  })
 
   $(document).ready(function ($) {
-    $('[data-control="file-js"]').tifyFileJs();
+    $('[data-control="file-js"]').tifyFileJs()
 
-    $.tify.observe('[data-control="file-js"]', function (i, target) {
-      $(target).tifyFileJs();
-    });
-  });
-});
+    MutationObserver('[data-control="file-js"]', function (i, target) {
+      $(target).tifyFileJs()
+    })
+  })
+})
