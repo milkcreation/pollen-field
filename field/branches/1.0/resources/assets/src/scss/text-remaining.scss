@@ -21,8 +21,10 @@
 }
 
 .FieldTextRemaining-wrapper {
+  padding-bottom: 10px;
+
   .FieldTextRemaining + .FieldTextRemaining-infos {
-    bottom: -5px;
+    bottom: 0;
   }
 }
 

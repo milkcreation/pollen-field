@@ -4,7 +4,7 @@ import jQuery from 'jquery';
 import 'jquery-ui/ui/core';
 import 'jquery-ui/ui/widget';
 import 'jquery-ui/ui/widgets/sortable';
-import '../../../observer/js/scripts';
+import MutationObserver from '@pollen-solutions/support/resources/assets/src/js/mutation-observer';
 
 jQuery(function ($) {
   $.widget('tify.tifyRepeater', {
@@ -256,7 +256,7 @@ jQuery(function ($) {
   $(document).ready(function () {
     $('[data-control="repeater"]').tifyRepeater();
 
-    $.tify.observe('[data-control="repeater"]', function (i, target) {
+    MutationObserver('[data-control="repeater"]', function (target) {
       $(target).tifyRepeater();
     });
   });

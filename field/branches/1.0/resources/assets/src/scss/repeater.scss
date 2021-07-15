@@ -1,6 +1,9 @@
 // Variables
 @import "./variables";
 
+// Dependencies
+@import "~@pollen-solutions/support/resources/assets/src/scss/card.scss";
+
 // Customization
 .FieldRepeater-item {
   min-height:80px;
@@ -10,7 +13,7 @@
   }
 }
 
-.FieldRepeater-itemOrder.ThemeFeed-itemOrder[type="text"] {
+.FieldRepeater-itemOrder.Card-order[type="text"] {
   min-height:12px;
   font-size:9px;
 }

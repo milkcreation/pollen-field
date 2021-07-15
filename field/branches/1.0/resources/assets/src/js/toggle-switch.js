@@ -1,28 +1,27 @@
-'use strict';
+'use strict'
 
-import jQuery from 'jquery';
-import 'jquery-ui/ui/core';
-import 'jquery-ui/ui/widget';
-import '../../../observer/js/scripts';
+import jQuery from 'jquery'
+import 'jquery-ui/ui/core'
+import 'jquery-ui/ui/widget'
+import MutationObserver from '@pollen-solutions/support/resources/assets/src/js/mutation-observer'
 
 jQuery(function ($) {
-  // Attribution de la valeur à l'élément.
-  let _hook = $.valHooks.div;
+  let _hook = $.valHooks.div
 
   $.valHooks.div = {
     get: function (elem) {
       if (typeof $(elem).tifyToggleSwitch('instance') === 'undefined') {
-        return _hook && _hook.get && _hook.get(elem) || undefined;
+        return _hook && _hook.get && _hook.get(elem) || undefined
       }
-      return $(elem).data('value');
+      return $(elem).data('value')
     },
     set: function (elem, value) {
       if (typeof $(elem).tifyToggleSwitch('instance') === 'undefined') {
-        return _hook && _hook.set && _hook.set(elem, value) || undefined;
+        return _hook && _hook.set && _hook.set(elem, value) || undefined
       }
-      $(elem).data('value', value);
+      $(elem).data('value', value)
     }
-  };
+  }
 
   $.widget('tify.tifyToggleSwitch', {
     widgetEventPrefix: 'toggle-switch:',
@@ -30,41 +29,42 @@ jQuery(function ($) {
     options: {},
     // Instanciation de l'élément.
     _create: function () {
-      this.instance = this;
+      this.instance = this
 
-      this.el = this.element;
+      this.el = this.element
 
-      this.el.data('value', $('input[type="radio"]:checked', this.el).val());
+      this.el.data('value', $('input[type="radio"]:checked', this.el).val())
 
-      this._initEvents();
+      this._initEvents()
     },
-    // Initialisation des événements déclenchement.
+
     _initEvents: function () {
-      let self = this;
+      let self = this
 
-      this._trigger('init');
+      this._trigger('init')
 
-      this._on(this.el, {'change input[type="radio"]': function (e) {
-        self.el.data('value', $(e.target).val());
-        self._trigger('change');
-      }});
-    },
-
-  });
+      this._on(this.el, {
+        'change input[type="radio"]': function (e) {
+          self.el.data('value', $(e.target).val())
+          self._trigger('change')
+        }
+      })
+    }
+  })
 
   /* * /
   $(document).on('change', '.FieldToggleSwitch-radio', function () {
     $(this)
         .closest('.FieldToggleSwitch')
-        .trigger('toggle-switch:change', $(this).val());
-  });
+        .trigger('toggle-switch:change', $(this).val())
+  })
   /**/
 
   $(document).ready(function ($) {
-    $('[data-control="toggle-switch"]').tifyToggleSwitch();
+    $('[data-control="toggle-switch"]').tifyToggleSwitch()
 
-    $.tify.observe('[data-control="toggle-switch"]', function (i, target) {
-      $(target).tifyToggleSwitch();
-    });
-  });
-});
+    MutationObserver('[data-control="toggle-switch"]', function (i, target) {
+      $(target).tifyToggleSwitch()
+    })
+  })
+})

@@ -270,7 +270,7 @@ abstract class FieldDriver implements FieldDriverInterface
      */
     public function parseAttrValue(): FieldDriverInterface
     {
-        $value = $this->pull('value');
+        $value = $this->pull('value')?? $this->get('attrs.value');
 
         $this->set('attrs.value', $value !== null ? (string)$value : null);
 
